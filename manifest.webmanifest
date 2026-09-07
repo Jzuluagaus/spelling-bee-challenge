@@ -1,0 +1,10 @@
+{
+  "name": "Spelling Bee Challenge",
+  "short_name": "Spelling Bee",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#fff7d6",
+  "description": "A simple spelling practice game powered by Smile Alegr\u00eda Dental Studio.",
+  "icons": []
+}

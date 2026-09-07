@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#fff7d6" />
+  <meta name="description" content="Spelling Bee Challenge powered by Smile Alegría Dental Studio." />
+  <title>Spelling Bee Challenge</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <style>
+    :root{
+      --bg:#ffffff;
+      --text:#151515;
+      --muted:#666;
+      --line:#e6e6e6;
+      --soft:#f7f7f8;
+      --bee:#ffd84d;
+      --bee-dark:#cc9f00;
+      --ok:#198754;
+      --bad:#d64545;
+      --brand:#fff7d6;
+      --brand-border:#f1d46b;
+      --cta:#111;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    body{min-height:100vh}
+    button,a{font:inherit}
+    button{cursor:pointer}
+    .page{width:min(100%,980px);margin:0 auto;padding:18px 18px 28px}
+    .hero{text-align:center;padding:10px 0 22px}
+    .hero h1{margin:0;font-size:clamp(2rem,5vw,3.25rem);line-height:1.05;letter-spacing:-.03em}
+    .hero p{margin:.5rem 0 0;color:var(--muted);font-size:clamp(1rem,2vw,1.15rem)}
+    .status{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
+    .status h2{margin:0;font-size:clamp(1.45rem,3.4vw,2.25rem);line-height:1.1}
+    .progress{margin-top:8px;color:var(--muted);font-size:clamp(1rem,2.4vw,1.2rem)}
+    .score{text-align:right;white-space:nowrap;font-size:clamp(1rem,2.4vw,1.2rem);line-height:1.7}
+    .score strong{font-size:1.35em}
+    .answers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .answer{
+      min-height:124px;border:3px solid var(--line);background:#fff;border-radius:26px;
+      font-weight:800;font-size:clamp(1.55rem,5vw,2.5rem);padding:18px 12px;
+      transition:transform .08s ease,border-color .15s ease,background .15s ease;
+    }
+    .answer:active{transform:scale(.99)}
+    .answer:focus-visible,.help-btn:focus-visible,.cta:focus-visible,.newgame:focus-visible{
+      outline:4px solid rgba(255,216,77,.6);outline-offset:3px
+    }
+    .answer.correct{border-color:#8bd3a9;background:#f1fbf5;color:#0d5e35}
+    .answer.wrong{border-color:#f0aaaa;background:#fff5f5;color:#8a1e1e}
+    .feedback{
+      margin-top:14px;min-height:72px;background:var(--soft);border-radius:24px;
+      display:flex;align-items:center;justify-content:center;text-align:center;
+      padding:14px 18px;font-size:clamp(1rem,2.6vw,1.25rem)
+    }
+    .help{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+    .help-btn{
+      min-height:74px;border:2px solid var(--line);background:#fff;border-radius:20px;
+      font-weight:750;font-size:clamp(.95rem,2.4vw,1.15rem);padding:10px
+    }
+    .clue{
+      display:none;margin-top:12px;padding:14px;border:2px solid var(--line);border-radius:18px;
+      text-align:center;font-size:1.05rem;background:#fff
+    }
+    .clue.show{display:block}
+    .meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.95rem;margin:14px 2px 0}
+    .brand{
+      margin-top:26px;background:var(--brand);border:2px solid var(--brand-border);border-radius:22px;
+      padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px
+    }
+    .brand-copy{display:flex;align-items:center;gap:12px;min-width:0}
+    .pandita{font-size:2.2rem}
+    .brand-title{font-weight:850}
+    .brand-sub{color:#5d5536;font-size:.95rem;margin-top:2px}
+    .cta{
+      background:var(--cta);color:#fff;text-decoration:none;border-radius:14px;
+      min-height:48px;padding:0 16px;display:inline-flex;align-items:center;justify-content:center;
+      font-weight:800;text-align:center
+    }
+    .finish{display:none;text-align:center;border:3px solid var(--line);border-radius:28px;padding:34px 20px}
+    .finish.show{display:block}
+    .finish .emoji{font-size:4rem}
+    .finish h2{font-size:2rem;margin:.4rem 0}
+    .finish .final-score{font-size:2.5rem;font-weight:900;margin:.8rem 0}
+    .newgame{border:0;background:#111;color:#fff;border-radius:14px;min-height:50px;padding:0 20px;font-weight:800}
+    .game.hide{display:none}
+    @media (max-width:640px){
+      .page{padding:14px 14px 20px}
+      .hero{padding-top:6px;padding-bottom:16px}
+      .status{gap:10px}
+      .answers{gap:10px}
+      .answer{min-height:96px;border-radius:22px}
+      .feedback{min-height:62px;border-radius:20px}
+      .help{gap:8px}
+      .help-btn{min-height:62px;border-radius:16px;padding:8px 6px}
+      .brand{align-items:stretch;flex-direction:column}
+      .cta{width:100%}
+    }
+    @media (max-width:380px){
+      .answers{grid-template-columns:1fr}
+      .answer{min-height:74px}
+      .help{grid-template-columns:1fr}
+      .status{flex-direction:column}
+      .score{text-align:left;display:flex;gap:18px}
+    }
+    @media (prefers-reduced-motion:reduce){
+      *{scroll-behavior:auto!important;transition:none!important}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero" aria-labelledby="title">
+      <h1 id="title">🐝 Spelling Bee Challenge</h1>
+      <p>Practice · Learn · Master</p>
+    </section>
+
+    <section id="game" class="game" aria-live="polite">
+      <div class="status">
+        <div>
+          <h2>Which spelling is correct?</h2>
+          <div id="progress" class="progress">Word 1 · 18 remaining</div>
+        </div>
+        <div class="score">
+          <div><strong>⭐ <span id="score">0</span></strong></div>
+          <div>🔥 <span id="streak">0</span> streak</div>
+        </div>
+      </div>
+
+      <div class="answers" aria-label="Answer choices">
+        <button class="answer" id="a0" type="button">dere</button>
+        <button class="answer" id="a1" type="button">deeer</button>
+        <button class="answer" id="a2" type="button">dear</button>
+        <button class="answer" id="a3" type="button">deer</button>
+      </div>
+
+      <div id="feedback" class="feedback" role="status">👀 Look carefully. One is correct.</div>
+
+      <div class="help" aria-label="Hints">
+        <button id="hear" class="help-btn" type="button">🔊 Hear</button>
+        <button id="define" class="help-btn" type="button">💡 Definition</button>
+        <button id="sentence" class="help-btn" type="button">💬 Sentence</button>
+      </div>
+
+      <div id="clue" class="clue" role="status"></div>
+
+      <div class="meta">
+        <span id="stats">✓ 0 correct · ✕ 0 mistakes</span>
+        <span id="worth">Worth ⭐ 100 pts</span>
+      </div>
+    </section>
+
+    <section id="finish" class="finish" aria-live="polite">
+      <div class="emoji">🏆🐝</div>
+      <h2>Spelling Bee Complete!</h2>
+      <p>Great work! You mastered all the words.</p>
+      <div id="finalScore" class="final-score">⭐ 0</div>
+      <div id="finalStats"></div>
+      <button id="restart" class="newgame" type="button">Play again</button>
+    </section>
+
+    <aside class="brand" aria-label="Smile Alegría sponsor">
+      <div class="brand-copy">
+        <div class="pandita" aria-hidden="true">🐼</div>
+        <div>
+          <div class="brand-title">Smile Alegría Dental Studio</div>
+          <div class="brand-sub">La clínica dental para toda la familia en León, GTO.</div>
+        </div>
+      </div>
+      <a id="bookingLink" class="cta" href="#" rel="noopener">Agenda tu cita de valoración →</a>
+    </aside>
+  </main>
+
+  <script>
+  (() => {
+    // Replace this before publishing with Smile Alegría's real WhatsApp/booking URL.
+    const BOOKING_URL = "https://wa.me/524771547387?text=Hola%20Smile%20Alegr%C3%ADa%2C%20quiero%20agendar%20una%20cita%20de%20valoraci%C3%B3n.";
+
+    const words = [
+      {w:"classmates", wrong:["classmats","clasmmates","classmatess"], d:"People who are in the same class at school.", s:"I work with my _____ during class."},
+      {w:"classroom", wrong:["clasroom","classrom","classrroom"], d:"A room at school where students learn.", s:"Our _____ has desks and a whiteboard."},
+      {w:"country", wrong:["contry","countrey","countri"], d:"A nation with its own land and government.", s:"Mexico is a _____."},
+      {w:"town", wrong:["toun","towm","tawn"], d:"A place where people live, usually smaller than a city.", s:"They live in a small _____."},
+      {w:"recess", wrong:["reces","reccess","resess"], d:"A break during the school day.", s:"We play outside during _____."},
+      {w:"playground", wrong:["playgrond","plaiground","playgroun"], d:"A place where children can play.", s:"The swings are on the _____."},
+      {w:"family", wrong:["famly","familey","familly"], d:"People who are related to each other.", s:"My _____ eats dinner together."},
+      {w:"teacher", wrong:["techer","teachar","teecher"], d:"A person who helps students learn.", s:"Our _____ explained the lesson."},
+      {w:"song", wrong:["sung","sogn","songg"], d:"A piece of music with words that are sung.", s:"We learned a new _____ in music class."},
+      {w:"parade", wrong:["parad","paraide","parrade"], d:"A public celebration that moves along a route.", s:"We watched the _____ downtown."},
+      {w:"forest", wrong:["forrest","forst","foreste"], d:"A large area covered with trees.", s:"Many animals live in the _____."},
+      {w:"plant", wrong:["plent","plannt","plante"], d:"A living thing that often has roots and leaves.", s:"The _____ needs water and sunlight."},
+      {w:"deer", wrong:["dere","deeer","dear"], d:"A wild animal with long legs; males often have antlers.", s:"A _____ walked between the trees."},
+      {w:"squirrel", wrong:["squirel","squirrell","squerrel"], d:"A small animal with a bushy tail that often climbs trees.", s:"The _____ climbed the tree."},
+      {w:"rabbit", wrong:["rabit","rabbitt","rabbet"], d:"A small animal with long ears and strong back legs.", s:"The _____ hopped across the grass."},
+      {w:"bear", wrong:["bare","beer","bair"], d:"A large strong animal with thick fur.", s:"The _____ walked through the forest."},
+      {w:"city", wrong:["citty","sity","citey"], d:"A large place where many people live and work.", s:"The _____ has many tall buildings."},
+      {w:"village", wrong:["vilage","villige","villiage"], d:"A small community, usually smaller than a town.", s:"They visited a quiet _____."},
+      {w:"subway", wrong:["subwey","subwai","subbway"], d:"A train system that often runs beneath a city.", s:"We took the _____ downtown."}
+    ];
+
+    const $ = (id) => document.getElementById(id);
+    const answerButtons = [0,1,2,3].map(i => $("a"+i));
+    let queue = [];
+    let current = null;
+    let attempts = 0;
+    let score = 0;
+    let streak = 0;
+    let correct = 0;
+    let mistakes = 0;
+    let value = 100;
+    let locked = false;
+
+    function shuffle(arr){
+      for(let i=arr.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+      }
+      return arr;
+    }
+
+    function resetGame(){
+      queue = shuffle(words.map((_,i)=>i));
+      current = null;
+      attempts = score = streak = correct = mistakes = 0;
+      value = 100;
+      locked = false;
+      $("finish").classList.remove("show");
+      $("game").classList.remove("hide");
+      nextWord();
+    }
+
+    function nextWord(){
+      if(queue.length===0){
+        $("game").classList.add("hide");
+        $("finish").classList.add("show");
+        $("finalScore").textContent = "⭐ " + score;
+        $("finalStats").textContent = `✓ ${correct} correct · ✕ ${mistakes} mistakes`;
+        return;
+      }
+
+      current = queue.shift();
+      attempts += 1;
+      value = 100;
+      locked = false;
+
+      const item = words[current];
+      const options = shuffle([item.w, ...item.wrong.slice()]);
+
+      answerButtons.forEach((btn,i)=>{
+        btn.disabled = false;
+        btn.className = "answer";
+        btn.textContent = options[i];
+      });
+
+      $("progress").textContent = `Word ${attempts} · ${queue.length} remaining`;
+      $("feedback").textContent = "👀 Look carefully. One is correct.";
+      $("clue").className = "clue";
+      $("clue").textContent = "";
+      updateMeta();
+    }
+
+    function updateMeta(){
+      $("score").textContent = score;
+      $("streak").textContent = streak;
+      $("stats").textContent = `✓ ${correct} correct · ✕ ${mistakes} mistakes`;
+      $("worth").textContent = `Worth ⭐ ${value} pts`;
+    }
+
+    function showClue(text){
+      const clue = $("clue");
+      clue.textContent = text;
+      clue.className = "clue show";
+    }
+
+    function useHelp(kind){
+      if(locked) return;
+      value = Math.max(50, value - 25);
+      const item = words[current];
+      if(kind==="definition") showClue("💡 " + item.d);
+      if(kind==="sentence") showClue("💬 " + item.s);
+      updateMeta();
+    }
+
+    function hearWord(){
+      if(locked) return;
+      value = Math.max(50, value - 25);
+      updateMeta();
+
+      if("speechSynthesis" in window){
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(words[current].w);
+        u.lang = "en-US";
+        u.rate = 0.78;
+        window.speechSynthesis.speak(u);
+      } else {
+        showClue("🔊 Audio is not available on this device.");
+      }
+    }
+
+    function choose(btn){
+      if(locked) return;
+      locked = true;
+      const answer = words[current].w;
+      const chosen = btn.textContent;
+
+      if(chosen===answer){
+        btn.classList.add("correct");
+        btn.textContent = "✓ " + answer;
+        correct += 1;
+        streak += 1;
+        score += value;
+        $("feedback").textContent = `⭐ Correct! +${value} points`;
+      } else {
+        btn.classList.add("wrong");
+        btn.textContent = "✕ " + chosen;
+        mistakes += 1;
+        streak = 0;
+        queue.push(current);
+        $("feedback").textContent = `Almost! The correct spelling is ${answer}. You will see it again.`;
+        answerButtons.forEach(b=>{
+          if(b.textContent===answer){
+            b.classList.add("correct");
+            b.textContent = "✓ " + answer;
+          }
+        });
+      }
+
+      updateMeta();
+      answerButtons.forEach(b=>b.disabled=true);
+      window.setTimeout(nextWord, 1400);
+    }
+
+    answerButtons.forEach(btn=>btn.addEventListener("click",()=>choose(btn)));
+    $("define").addEventListener("click",()=>useHelp("definition"));
+    $("sentence").addEventListener("click",()=>useHelp("sentence"));
+    $("hear").addEventListener("click",hearWord);
+    $("restart").addEventListener("click",resetGame);
+
+    $("bookingLink").href = BOOKING_URL;
+
+    if("serviceWorker" in navigator){
+      window.addEventListener("load",()=>{
+        navigator.serviceWorker.register("sw.js").catch(()=>{});
+      });
+    }
+
+    resetGame();
+  })();
+  </script>
+</body>
+</html>
