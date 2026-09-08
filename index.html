@@ -91,6 +91,13 @@
       min-height:58px;padding:0 28px;font-weight:900;font-size:clamp(1.05rem,3.2vw,1.25rem);
       letter-spacing:.04em;width:min(100%,320px)
     }
+    .practice{
+      display:none;margin:12px auto 0;border:3px solid #111;background:#fff;color:#111;border-radius:16px;
+      min-height:54px;padding:0 22px;font-weight:900;font-size:clamp(.95rem,3vw,1.1rem);
+      letter-spacing:.04em;width:min(100%,320px)
+    }
+    .practice.show{display:inline-flex;align-items:center;justify-content:center}
+    .finish-actions{display:flex;flex-direction:column;align-items:center;gap:0;width:100%}
     .game.hide{display:none}
     @media (max-width:640px){
       html,body{max-width:100%;overflow-x:hidden}
@@ -125,7 +132,7 @@
       .yazmin-wrap{width:min(100%,340px);margin-bottom:10px}
       .spelling-score-value{font-size:clamp(2.1rem,11vw,2.8rem);margin-bottom:10px}
       .finish .final-score{font-size:1.35rem}
-      .newgame{min-height:54px;width:100%}
+      .newgame,.practice{min-height:54px;width:100%}
     }
     @media (max-width:430px){
       .page{padding:10px 8px 16px}
@@ -169,7 +176,7 @@
       <div class="status">
         <div>
           <h2>Which spelling is correct?</h2>
-          <div id="progress" class="progress">Word 1 · 18 remaining</div>
+          <div id="progress" class="progress">Word 1 · 19 remaining</div>
         </div>
         <div class="score">
           <div><strong>⭐ <span id="score">0</span></strong></div>
@@ -209,7 +216,10 @@
       <div id="spellingScore" class="spelling-score-value">0%</div>
       <div id="finalScore" class="final-score">⭐ 0 points</div>
       <div id="finalStats" class="final-stats">🔥 Best streak: 0</div>
-      <button id="restart" class="newgame" type="button">PLAY AGAIN</button>
+      <div class="finish-actions">
+        <button id="restart" class="newgame" type="button">PLAY AGAIN</button>
+        <button id="practiceMistakes" class="practice" type="button">PRACTICE MY MISTAKES</button>
+      </div>
     </section>
 
     <aside class="brand" aria-label="Smile Alegría sponsor">
@@ -248,7 +258,8 @@
       {w:"bear", wrong:["bare","beer","bair"], d:"A large strong animal with thick fur.", s:"The _____ walked through the forest."},
       {w:"city", wrong:["citty","sity","citey"], d:"A large place where many people live and work.", s:"The _____ has many tall buildings."},
       {w:"village", wrong:["vilage","villige","villiage"], d:"A small community, usually smaller than a town.", s:"They visited a quiet _____."},
-      {w:"subway", wrong:["subwey","subwai","subbway"], d:"A train system that often runs beneath a city.", s:"We took the _____ downtown."}
+      {w:"subway", wrong:["subwey","subwai","subbway"], d:"A train system that often runs beneath a city.", s:"We took the _____ downtown."},
+      {w:"school", wrong:["scool","scholl","skool"], d:"A place where students go to learn.", s:"We learn reading and math at _____."}
     ];
 
     const $ = (id) => document.getElementById(id);
@@ -263,10 +274,12 @@
     let mistakes = 0;
     let value = 100;
     let locked = false;
-    let firstAttemptOutcome = [];
-    let isFirstPresentation = false;
+    let mode = "main";
+    let missedWords = [];
+    let mainCorrect = 0;
+    let lockedSpellingPct = null;
 
-    const TOTAL_WORDS = 19;
+    const ROUND_SIZE = 20;
     const AVATARS = {
       wow: {src:"yazmin-wow.png", heading:"WOW! You crushed it!", alt:"Yazmin celebrating — wow you crushed it"},
       good: {src:"yazmin-good-job.png", heading:"Good Job!", alt:"Yazmin giving a thumbs up — good job"},
@@ -281,12 +294,22 @@
       return arr;
     }
 
+    function selectRoundWords(){
+      if(words.length < ROUND_SIZE){
+        throw new Error("Word bank needs at least " + ROUND_SIZE + " words");
+      }
+      return shuffle(words.map((_,i)=>i)).slice(0, ROUND_SIZE);
+    }
+
     function spellingPercent(){
-      const firstCorrect = firstAttemptOutcome.filter((v) => v === true).length;
-      return Math.round((firstCorrect / TOTAL_WORDS) * 100);
+      if(lockedSpellingPct !== null) return lockedSpellingPct;
+      return Math.round((mainCorrect / ROUND_SIZE) * 100);
     }
 
     function showResults(){
+      if(mode === "main" && lockedSpellingPct === null){
+        lockedSpellingPct = Math.round((mainCorrect / ROUND_SIZE) * 100);
+      }
       const pct = spellingPercent();
       let tier = AVATARS.retry;
       if(pct >= 90) tier = AVATARS.wow;
@@ -299,18 +322,38 @@
       $("spellingScore").textContent = pct + "%";
       $("finalScore").textContent = "⭐ " + score + " points";
       $("finalStats").textContent = "🔥 Best streak: " + bestStreak;
+      const practiceBtn = $("practiceMistakes");
+      if(missedWords.length > 0){
+        practiceBtn.classList.add("show");
+      } else {
+        practiceBtn.classList.remove("show");
+      }
       $("game").classList.add("hide");
       $("finish").classList.add("show");
     }
 
     function resetGame(){
-      queue = shuffle(words.map((_,i)=>i));
+      mode = "main";
+      queue = selectRoundWords();
       current = null;
-      attempts = score = streak = bestStreak = correct = mistakes = 0;
+      attempts = score = streak = bestStreak = correct = mistakes = mainCorrect = 0;
       value = 100;
       locked = false;
-      isFirstPresentation = false;
-      firstAttemptOutcome = words.map(() => null);
+      missedWords = [];
+      lockedSpellingPct = null;
+      $("practiceMistakes").classList.remove("show");
+      $("finish").classList.remove("show");
+      $("game").classList.remove("hide");
+      nextWord();
+    }
+
+    function startPractice(){
+      if(missedWords.length === 0) return;
+      mode = "review";
+      queue = shuffle(missedWords.slice());
+      current = null;
+      attempts = 0;
+      locked = false;
       $("finish").classList.remove("show");
       $("game").classList.remove("hide");
       nextWord();
@@ -323,7 +366,6 @@
       }
 
       current = queue.shift();
-      isFirstPresentation = firstAttemptOutcome[current] === null;
       attempts += 1;
       value = 100;
       locked = false;
@@ -337,7 +379,11 @@
         btn.textContent = options[i];
       });
 
-      $("progress").textContent = `Word ${attempts} · ${queue.length} remaining`;
+      if(mode === "main"){
+        $("progress").textContent = `Word ${attempts} · ${queue.length} remaining`;
+      } else {
+        $("progress").textContent = `Practice · ${queue.length} remaining`;
+      }
       $("feedback").textContent = "👀 Look carefully. One is correct.";
       $("clue").className = "clue";
       $("clue").textContent = "";
@@ -395,16 +441,20 @@
         streak += 1;
         if(streak > bestStreak) bestStreak = streak;
         score += value;
-        if(isFirstPresentation) firstAttemptOutcome[current] = true;
+        if(mode === "main") mainCorrect += 1;
         $("feedback").textContent = `⭐ Correct! +${value} points`;
       } else {
         btn.classList.add("wrong");
         btn.textContent = "✕ " + chosen;
         mistakes += 1;
         streak = 0;
-        if(isFirstPresentation) firstAttemptOutcome[current] = false;
-        queue.push(current);
-        $("feedback").textContent = `Almost! The correct spelling is ${answer}. You will see it again.`;
+        if(mode === "main"){
+          if(!missedWords.includes(current)) missedWords.push(current);
+          $("feedback").textContent = `Almost! The correct spelling is ${answer}.`;
+        } else {
+          queue.push(current);
+          $("feedback").textContent = `Almost! The correct spelling is ${answer}. You will see it again.`;
+        }
         answerButtons.forEach(b=>{
           if(b.textContent===answer){
             b.classList.add("correct");
@@ -423,6 +473,7 @@
     $("sentence").addEventListener("click",()=>useHelp("sentence"));
     $("hear").addEventListener("click",hearWord);
     $("restart").addEventListener("click",resetGame);
+    $("practiceMistakes").addEventListener("click",startPractice);
 
     $("bookingLink").href = BOOKING_URL;
 
