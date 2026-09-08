@@ -77,12 +77,20 @@
       min-height:48px;padding:0 16px;display:inline-flex;align-items:center;justify-content:center;
       font-weight:800;text-align:center
     }
-    .finish{display:none;text-align:center;border:3px solid var(--line);border-radius:28px;padding:34px 20px}
+    .finish{display:none;text-align:center;border:3px solid var(--line);border-radius:28px;padding:28px 18px 30px;max-width:100%;overflow:hidden}
     .finish.show{display:block}
-    .finish .emoji{font-size:4rem}
-    .finish h2{font-size:2rem;margin:.4rem 0}
-    .finish .final-score{font-size:2.5rem;font-weight:900;margin:.8rem 0}
-    .newgame{border:0;background:#111;color:#fff;border-radius:14px;min-height:50px;padding:0 20px;font-weight:800}
+    .finish-heading{font-size:clamp(1.55rem,4.5vw,2.35rem);margin:0 0 12px;line-height:1.15;letter-spacing:-.02em}
+    .yazmin-wrap{width:min(100%,420px);margin:0 auto 14px}
+    .yazmin-avatar{display:block;width:100%;height:auto;max-width:100%;border-radius:18px}
+    .spelling-score-label{margin:8px 0 0;font-weight:850;letter-spacing:.08em;font-size:clamp(.85rem,2.4vw,1rem);color:var(--muted)}
+    .spelling-score-value{margin:2px 0 14px;font-size:clamp(2.4rem,8vw,3.4rem);font-weight:900;line-height:1.05}
+    .finish .final-score{font-size:clamp(1.35rem,4vw,1.85rem);font-weight:900;margin:.2rem 0}
+    .finish .final-stats{color:var(--muted);font-size:clamp(.95rem,2.5vw,1.1rem);margin:0 0 18px}
+    .newgame{
+      border:0;background:#111;color:#fff;border-radius:16px;
+      min-height:58px;padding:0 28px;font-weight:900;font-size:clamp(1.05rem,3.2vw,1.25rem);
+      letter-spacing:.04em;width:min(100%,320px)
+    }
     .game.hide{display:none}
     @media (max-width:640px){
       html,body{max-width:100%;overflow-x:hidden}
@@ -112,10 +120,12 @@
       .brand-title{font-size:.95rem}
       .brand-sub{font-size:.85rem;overflow-wrap:anywhere}
       .cta{width:100%;font-size:.9rem;padding:0 12px}
-      .finish{padding:24px 14px}
-      .finish h2{font-size:1.5rem}
-      .finish .final-score{font-size:2rem}
-      .finish .emoji{font-size:3rem}
+      .finish{padding:18px 10px 22px}
+      .finish-heading{font-size:clamp(1.35rem,6vw,1.7rem);margin-bottom:10px}
+      .yazmin-wrap{width:min(100%,340px);margin-bottom:10px}
+      .spelling-score-value{font-size:clamp(2.1rem,11vw,2.8rem);margin-bottom:10px}
+      .finish .final-score{font-size:1.35rem}
+      .newgame{min-height:54px;width:100%}
     }
     @media (max-width:430px){
       .page{padding:10px 8px 16px}
@@ -140,6 +150,8 @@
       .help-btn{min-height:50px;font-size:clamp(.64rem,2.5vw,.82rem)}
       .brand{padding:10px}
       .brand-sub{font-size:.8rem}
+      .yazmin-wrap{width:100%}
+      .finish-heading{font-size:1.25rem}
     }
     @media (prefers-reduced-motion:reduce){
       *{scroll-behavior:auto!important;transition:none!important}
@@ -189,12 +201,15 @@
     </section>
 
     <section id="finish" class="finish" aria-live="polite">
-      <div class="emoji">🏆🐝</div>
-      <h2>Spelling Bee Complete!</h2>
-      <p>Great work! You mastered all the words.</p>
-      <div id="finalScore" class="final-score">⭐ 0</div>
-      <div id="finalStats"></div>
-      <button id="restart" class="newgame" type="button">Play again</button>
+      <h2 id="finishHeading" class="finish-heading">WOW! You crushed it!</h2>
+      <div class="yazmin-wrap">
+        <img id="yazminAvatar" class="yazmin-avatar" src="yazmin-wow.png" alt="Yazmin celebrating your Spelling Bee result" width="840" height="840" decoding="async" />
+      </div>
+      <div class="spelling-score-label">SPELLING SCORE</div>
+      <div id="spellingScore" class="spelling-score-value">0%</div>
+      <div id="finalScore" class="final-score">⭐ 0 points</div>
+      <div id="finalStats" class="final-stats">🔥 Best streak: 0</div>
+      <button id="restart" class="newgame" type="button">PLAY AGAIN</button>
     </section>
 
     <aside class="brand" aria-label="Smile Alegría sponsor">
@@ -243,10 +258,20 @@
     let attempts = 0;
     let score = 0;
     let streak = 0;
+    let bestStreak = 0;
     let correct = 0;
     let mistakes = 0;
     let value = 100;
     let locked = false;
+    let firstAttemptOutcome = [];
+    let isFirstPresentation = false;
+
+    const TOTAL_WORDS = 19;
+    const AVATARS = {
+      wow: {src:"yazmin-wow.png", heading:"WOW! You crushed it!", alt:"Yazmin celebrating — wow you crushed it"},
+      good: {src:"yazmin-good-job.png", heading:"Good Job!", alt:"Yazmin giving a thumbs up — good job"},
+      retry: {src:"yazmin-are-you-kidding.png", heading:"Are you kidding me? 😜", alt:"Yazmin teasing — are you kidding me, try again"}
+    };
 
     function shuffle(arr){
       for(let i=arr.length-1;i>0;i--){
@@ -256,12 +281,36 @@
       return arr;
     }
 
+    function spellingPercent(){
+      const firstCorrect = firstAttemptOutcome.filter((v) => v === true).length;
+      return Math.round((firstCorrect / TOTAL_WORDS) * 100);
+    }
+
+    function showResults(){
+      const pct = spellingPercent();
+      let tier = AVATARS.retry;
+      if(pct >= 90) tier = AVATARS.wow;
+      else if(pct >= 75) tier = AVATARS.good;
+
+      $("finishHeading").textContent = tier.heading;
+      const img = $("yazminAvatar");
+      img.src = tier.src;
+      img.alt = tier.alt;
+      $("spellingScore").textContent = pct + "%";
+      $("finalScore").textContent = "⭐ " + score + " points";
+      $("finalStats").textContent = "🔥 Best streak: " + bestStreak;
+      $("game").classList.add("hide");
+      $("finish").classList.add("show");
+    }
+
     function resetGame(){
       queue = shuffle(words.map((_,i)=>i));
       current = null;
-      attempts = score = streak = correct = mistakes = 0;
+      attempts = score = streak = bestStreak = correct = mistakes = 0;
       value = 100;
       locked = false;
+      isFirstPresentation = false;
+      firstAttemptOutcome = words.map(() => null);
       $("finish").classList.remove("show");
       $("game").classList.remove("hide");
       nextWord();
@@ -269,14 +318,12 @@
 
     function nextWord(){
       if(queue.length===0){
-        $("game").classList.add("hide");
-        $("finish").classList.add("show");
-        $("finalScore").textContent = "⭐ " + score;
-        $("finalStats").textContent = `✓ ${correct} correct · ✕ ${mistakes} mistakes`;
+        showResults();
         return;
       }
 
       current = queue.shift();
+      isFirstPresentation = firstAttemptOutcome[current] === null;
       attempts += 1;
       value = 100;
       locked = false;
@@ -346,13 +393,16 @@
         btn.textContent = "✓ " + answer;
         correct += 1;
         streak += 1;
+        if(streak > bestStreak) bestStreak = streak;
         score += value;
+        if(isFirstPresentation) firstAttemptOutcome[current] = true;
         $("feedback").textContent = `⭐ Correct! +${value} points`;
       } else {
         btn.classList.add("wrong");
         btn.textContent = "✕ " + chosen;
         mistakes += 1;
         streak = 0;
+        if(isFirstPresentation) firstAttemptOutcome[current] = false;
         queue.push(current);
         $("feedback").textContent = `Almost! The correct spelling is ${answer}. You will see it again.`;
         answerButtons.forEach(b=>{
