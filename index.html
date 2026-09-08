@@ -43,7 +43,7 @@
       transition:transform .08s ease,border-color .15s ease,background .15s ease;
     }
     .answer:active{transform:scale(.99)}
-    .answer:focus-visible,.help-btn:focus-visible,.cta:focus-visible,.newgame:focus-visible{
+    .answer:focus-visible,.help-btn:focus-visible,.cta:focus-visible,.newgame:focus-visible,.unit-btn:focus-visible,.mixed-btn:focus-visible,.practice:focus-visible,.change-unit:focus-visible{
       outline:4px solid rgba(255,216,77,.6);outline-offset:3px
     }
     .answer.correct{border-color:#8bd3a9;background:#f1fbf5;color:#0d5e35}
@@ -98,10 +98,35 @@
     }
     .practice.show{display:inline-flex;align-items:center;justify-content:center}
     .finish-actions{display:flex;flex-direction:column;align-items:center;gap:0;width:100%}
+    .menu{display:block;text-align:center;max-width:100%}
+    .menu.hide{display:none}
+    .menu-title{margin:0 0 16px;font-size:clamp(1.35rem,3.5vw,1.85rem);font-weight:850}
+    .unit-grid{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;
+      width:min(100%,520px);margin:0 auto 14px
+    }
+    .unit-btn{
+      min-height:64px;border:3px solid var(--line);background:#fff;border-radius:18px;
+      font-weight:850;font-size:clamp(1rem,2.8vw,1.2rem);padding:12px 8px
+    }
+    .unit-btn:disabled{
+      opacity:.45;cursor:not-allowed;background:var(--soft);color:#888
+    }
+    .unit-btn .soon,.mixed-btn .soon{display:block;margin-top:4px;font-size:.75rem;font-weight:650;color:var(--muted)}
+    .mixed-btn{
+      width:min(100%,520px);margin:0 auto;min-height:64px;border:3px solid var(--line);
+      background:#fff;border-radius:18px;font-weight:850;font-size:clamp(1rem,2.8vw,1.2rem);padding:12px 10px
+    }
+    .mixed-btn:disabled{opacity:.45;cursor:not-allowed;background:var(--soft);color:#888}
+    .change-unit{
+      display:none;margin:10px auto 0;border:0;background:transparent;color:var(--muted);
+      font-weight:750;font-size:.95rem;text-decoration:underline;min-height:44px;padding:8px 12px
+    }
+    .change-unit.show{display:inline-flex;align-items:center;justify-content:center}
     .game.hide{display:none}
     @media (max-width:640px){
       html,body{max-width:100%;overflow-x:hidden}
-      .page,.status,.answers,.answer,.help,.help-btn,.brand,.brand-copy,.meta,.feedback,.clue,.finish{min-width:0;max-width:100%}
+      .page,.status,.answers,.answer,.help,.help-btn,.brand,.brand-copy,.meta,.feedback,.clue,.finish,.menu,.unit-grid,.unit-btn,.mixed-btn{min-width:0;max-width:100%}
       .page{padding:12px 10px 18px;width:100%}
       .hero{padding-top:4px;padding-bottom:12px}
       .hero h1{font-size:clamp(1.55rem,7vw,2.1rem)}
@@ -133,6 +158,8 @@
       .spelling-score-value{font-size:clamp(2.1rem,11vw,2.8rem);margin-bottom:10px}
       .finish .final-score{font-size:1.35rem}
       .newgame,.practice{min-height:54px;width:100%}
+      .unit-grid{gap:8px}
+      .unit-btn,.mixed-btn{min-height:56px;border-radius:16px}
     }
     @media (max-width:430px){
       .page{padding:10px 8px 16px}
@@ -172,7 +199,13 @@
       <p>Practice · Learn · Master</p>
     </section>
 
-    <section id="game" class="game" aria-live="polite">
+    <section id="menu" class="menu" aria-label="Unit selection">
+      <h2 class="menu-title">Choose your challenge</h2>
+      <div class="unit-grid" id="unitGrid"></div>
+      <button id="mixedBtn" class="mixed-btn" type="button" data-unit="mixed">🎯 Mixed Challenge</button>
+    </section>
+
+    <section id="game" class="game hide" aria-live="polite">
       <div class="status">
         <div>
           <h2>Which spelling is correct?</h2>
@@ -219,6 +252,7 @@
       <div class="finish-actions">
         <button id="restart" class="newgame" type="button">PLAY AGAIN</button>
         <button id="practiceMistakes" class="practice" type="button">PRACTICE MY MISTAKES</button>
+        <button id="changeUnit" class="change-unit" type="button">Choose another unit</button>
       </div>
     </section>
 
@@ -234,36 +268,22 @@
     </aside>
   </main>
 
+  <script src="words.js"></script>
   <script>
   (() => {
-    // Replace this before publishing with Smile Alegría's real WhatsApp/booking URL.
     const BOOKING_URL = "https://wa.me/524771547387?text=Hola%20Smile%20Alegr%C3%ADa%2C%20quiero%20agendar%20una%20cita%20de%20valoraci%C3%B3n.";
-
-    const words = [
-      {w:"classmates", wrong:["classmats","clasmmates","classmatess"], d:"People who are in the same class at school.", s:"I work with my _____ during class."},
-      {w:"classroom", wrong:["clasroom","classrom","classrroom"], d:"A room at school where students learn.", s:"Our _____ has desks and a whiteboard."},
-      {w:"country", wrong:["contry","countrey","countri"], d:"A nation with its own land and government.", s:"Mexico is a _____."},
-      {w:"town", wrong:["toun","towm","tawn"], d:"A place where people live, usually smaller than a city.", s:"They live in a small _____."},
-      {w:"recess", wrong:["reces","reccess","resess"], d:"A break during the school day.", s:"We play outside during _____."},
-      {w:"playground", wrong:["playgrond","plaiground","playgroun"], d:"A place where children can play.", s:"The swings are on the _____."},
-      {w:"family", wrong:["famly","familey","familly"], d:"People who are related to each other.", s:"My _____ eats dinner together."},
-      {w:"teacher", wrong:["techer","teachar","teecher"], d:"A person who helps students learn.", s:"Our _____ explained the lesson."},
-      {w:"song", wrong:["sung","sogn","songg"], d:"A piece of music with words that are sung.", s:"We learned a new _____ in music class."},
-      {w:"parade", wrong:["parad","paraide","parrade"], d:"A public celebration that moves along a route.", s:"We watched the _____ downtown."},
-      {w:"forest", wrong:["forrest","forst","foreste"], d:"A large area covered with trees.", s:"Many animals live in the _____."},
-      {w:"plant", wrong:["plent","plannt","plante"], d:"A living thing that often has roots and leaves.", s:"The _____ needs water and sunlight."},
-      {w:"deer", wrong:["dere","deeer","dear"], d:"A wild animal with long legs; males often have antlers.", s:"A _____ walked between the trees."},
-      {w:"squirrel", wrong:["squirel","squirrell","squerrel"], d:"A small animal with a bushy tail that often climbs trees.", s:"The _____ climbed the tree."},
-      {w:"rabbit", wrong:["rabit","rabbitt","rabbet"], d:"A small animal with long ears and strong back legs.", s:"The _____ hopped across the grass."},
-      {w:"bear", wrong:["bare","beer","bair"], d:"A large strong animal with thick fur.", s:"The _____ walked through the forest."},
-      {w:"city", wrong:["citty","sity","citey"], d:"A large place where many people live and work.", s:"The _____ has many tall buildings."},
-      {w:"village", wrong:["vilage","villige","villiage"], d:"A small community, usually smaller than a town.", s:"They visited a quiet _____."},
-      {w:"subway", wrong:["subwey","subwai","subbway"], d:"A train system that often runs beneath a city.", s:"We took the _____ downtown."},
-      {w:"school", wrong:["scool","scholl","skool"], d:"A place where students go to learn.", s:"We learn reading and math at _____."}
-    ];
+    const ROUND_SIZE = 20;
+    const AVATARS = {
+      wow: {src:"yazmin-wow.png", heading:"WOW! You crushed it!", alt:"Yazmin celebrating — wow you crushed it"},
+      good: {src:"yazmin-good-job.png", heading:"Good Job!", alt:"Yazmin giving a thumbs up — good job"},
+      retry: {src:"yazmin-are-you-kidding.png", heading:"Are you kidding me? 😜", alt:"Yazmin teasing — are you kidding me, try again"}
+    };
 
     const $ = (id) => document.getElementById(id);
     const answerButtons = [0,1,2,3].map(i => $("a"+i));
+
+    let activeUnit = null;
+    let words = [];
     let queue = [];
     let current = null;
     let attempts = 0;
@@ -279,13 +299,6 @@
     let mainCorrect = 0;
     let lockedSpellingPct = null;
 
-    const ROUND_SIZE = 20;
-    const AVATARS = {
-      wow: {src:"yazmin-wow.png", heading:"WOW! You crushed it!", alt:"Yazmin celebrating — wow you crushed it"},
-      good: {src:"yazmin-good-job.png", heading:"Good Job!", alt:"Yazmin giving a thumbs up — good job"},
-      retry: {src:"yazmin-are-you-kidding.png", heading:"Are you kidding me? 😜", alt:"Yazmin teasing — are you kidding me, try again"}
-    };
-
     function shuffle(arr){
       for(let i=arr.length-1;i>0;i--){
         const j=Math.floor(Math.random()*(i+1));
@@ -294,9 +307,43 @@
       return arr;
     }
 
+    function showView(view){
+      $("menu").classList.toggle("hide", view !== "menu");
+      $("game").classList.toggle("hide", view !== "game");
+      if(view === "finish") $("finish").classList.add("show");
+      else $("finish").classList.remove("show");
+    }
+
+    function buildMenu(){
+      const grid = $("unitGrid");
+      grid.innerHTML = "";
+      for(let n=1;n<=9;n++){
+        const key = "unit" + n;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "unit-btn";
+        btn.dataset.unit = key;
+        const playable = isUnitPlayable(key);
+        btn.disabled = !playable;
+        if(playable){
+          btn.textContent = "Unit " + n;
+        } else {
+          btn.innerHTML = "Unit " + n + '<span class="soon">Coming soon</span>';
+        }
+        btn.addEventListener("click", () => startUnit(key));
+        grid.appendChild(btn);
+      }
+      const mixed = $("mixedBtn");
+      const mixedOk = isUnitPlayable("mixed");
+      mixed.disabled = !mixedOk;
+      mixed.innerHTML = mixedOk
+        ? "🎯 Mixed Challenge"
+        : '🎯 Mixed Challenge<span class="soon">Coming soon</span>';
+    }
+
     function selectRoundWords(){
       if(words.length < ROUND_SIZE){
-        throw new Error("Word bank needs at least " + ROUND_SIZE + " words");
+        throw new Error("Selected unit needs at least " + ROUND_SIZE + " words");
       }
       return shuffle(words.map((_,i)=>i)).slice(0, ROUND_SIZE);
     }
@@ -323,16 +370,25 @@
       $("finalScore").textContent = "⭐ " + score + " points";
       $("finalStats").textContent = "🔥 Best streak: " + bestStreak;
       const practiceBtn = $("practiceMistakes");
-      if(missedWords.length > 0){
-        practiceBtn.classList.add("show");
-      } else {
-        practiceBtn.classList.remove("show");
-      }
-      $("game").classList.add("hide");
-      $("finish").classList.add("show");
+      if(missedWords.length > 0) practiceBtn.classList.add("show");
+      else practiceBtn.classList.remove("show");
+      $("changeUnit").classList.add("show");
+      showView("finish");
+    }
+
+    function startUnit(unitKey){
+      if(!isUnitPlayable(unitKey)) return;
+      activeUnit = unitKey;
+      words = getUnitWordList(unitKey);
+      if(words.length < ROUND_SIZE) return;
+      resetGame();
     }
 
     function resetGame(){
+      if(!activeUnit || words.length < ROUND_SIZE){
+        goToMenu();
+        return;
+      }
       mode = "main";
       queue = selectRoundWords();
       current = null;
@@ -342,9 +398,20 @@
       missedWords = [];
       lockedSpellingPct = null;
       $("practiceMistakes").classList.remove("show");
-      $("finish").classList.remove("show");
-      $("game").classList.remove("hide");
+      showView("game");
       nextWord();
+    }
+
+    function goToMenu(){
+      activeUnit = null;
+      words = [];
+      mode = "main";
+      lockedSpellingPct = null;
+      missedWords = [];
+      $("practiceMistakes").classList.remove("show");
+      $("changeUnit").classList.remove("show");
+      buildMenu();
+      showView("menu");
     }
 
     function startPractice(){
@@ -354,8 +421,7 @@
       current = null;
       attempts = 0;
       locked = false;
-      $("finish").classList.remove("show");
-      $("game").classList.remove("hide");
+      showView("game");
       nextWord();
     }
 
@@ -371,7 +437,7 @@
       locked = false;
 
       const item = words[current];
-      const options = shuffle([item.w, ...item.wrong.slice()]);
+      const options = shuffle([item.word, ...item.wrong.slice()]);
 
       answerButtons.forEach((btn,i)=>{
         btn.disabled = false;
@@ -407,8 +473,8 @@
       if(locked) return;
       value = Math.max(50, value - 25);
       const item = words[current];
-      if(kind==="definition") showClue("💡 " + item.d);
-      if(kind==="sentence") showClue("💬 " + item.s);
+      if(kind==="definition") showClue("💡 " + item.definition);
+      if(kind==="sentence") showClue("💬 " + item.sentence);
       updateMeta();
     }
 
@@ -419,7 +485,7 @@
 
       if("speechSynthesis" in window){
         window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(words[current].w);
+        const u = new SpeechSynthesisUtterance(words[current].word);
         u.lang = "en-US";
         u.rate = 0.78;
         window.speechSynthesis.speak(u);
@@ -431,7 +497,7 @@
     function choose(btn){
       if(locked) return;
       locked = true;
-      const answer = words[current].w;
+      const answer = words[current].word;
       const chosen = btn.textContent;
 
       if(chosen===answer){
@@ -474,6 +540,8 @@
     $("hear").addEventListener("click",hearWord);
     $("restart").addEventListener("click",resetGame);
     $("practiceMistakes").addEventListener("click",startPractice);
+    $("changeUnit").addEventListener("click",goToMenu);
+    $("mixedBtn").addEventListener("click",()=>startUnit("mixed"));
 
     $("bookingLink").href = BOOKING_URL;
 
@@ -483,7 +551,8 @@
       });
     }
 
-    resetGame();
+    buildMenu();
+    showView("menu");
   })();
   </script>
 </body>
