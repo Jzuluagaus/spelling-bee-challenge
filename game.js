@@ -1,5 +1,5 @@
 (() => {
-  const BOOKING_URL = "https://wa.me/524771547387?text=Hola%20Smile%20Alegr%C3%ADa%2C%20quiero%20agendar%20una%20cita%20de%20valoraci%C3%B3n.";
+  const BOOKING_URL = "https://wa.me/524771547387?text=Hola%2C%20somos%20familia%20Miraflores%20y%20vimos%20el%20beneficio%20de%20Smile%20Alegr%C3%ADa%20en%20Spelling%20Bee.%20Quisiera%20recibir%20informaci%C3%B3n.%20%F0%9F%90%BC";
   const ROUND_SIZE = 5;
   const AVATARS = {
     wow: {src:"yazmin-wow.png", heading:"WOW! You crushed it!", alt:"Yazmin celebrating — wow you crushed it"},
