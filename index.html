@@ -43,7 +43,7 @@
       transition:transform .08s ease,border-color .15s ease,background .15s ease;
     }
     .answer:active{transform:scale(.99)}
-    .answer:focus-visible,.help-btn:focus-visible,.cta:focus-visible,.newgame:focus-visible,.unit-btn:focus-visible,.mixed-btn:focus-visible,.practice:focus-visible,.change-unit:focus-visible{
+    .answer:focus-visible,.help-btn:focus-visible,.cta:focus-visible,.newgame:focus-visible,.unit-btn:focus-visible,.mixed-btn:focus-visible,.practice:focus-visible,.change-unit:focus-visible,.mode-card:focus-visible,.big-btn:focus-visible,.next-word:focus-visible{
       outline:4px solid rgba(255,216,77,.6);outline-offset:3px
     }
     .answer.correct{border-color:#8bd3a9;background:#f1fbf5;color:#0d5e35}
@@ -98,8 +98,8 @@
     }
     .practice.show{display:inline-flex;align-items:center;justify-content:center}
     .finish-actions{display:flex;flex-direction:column;align-items:center;gap:0;width:100%}
-    .menu{display:block;text-align:center;max-width:100%}
-    .menu.hide{display:none}
+    .menu,.mode-select{display:block;text-align:center;max-width:100%}
+    .menu.hide,.mode-select.hide,.game.hide,.panel.hide{display:none}
     .menu-title{margin:0 0 16px;font-size:clamp(1.35rem,3.5vw,1.85rem);font-weight:850}
     .unit-grid{
       display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;
@@ -109,24 +109,66 @@
       min-height:64px;border:3px solid var(--line);background:#fff;border-radius:18px;
       font-weight:850;font-size:clamp(1rem,2.8vw,1.2rem);padding:12px 8px
     }
-    .unit-btn:disabled{
-      opacity:.45;cursor:not-allowed;background:var(--soft);color:#888
-    }
+    .unit-btn:disabled{opacity:.45;cursor:not-allowed;background:var(--soft);color:#888}
     .unit-btn .soon,.mixed-btn .soon{display:block;margin-top:4px;font-size:.75rem;font-weight:650;color:var(--muted)}
     .mixed-btn{
       width:min(100%,520px);margin:0 auto;min-height:64px;border:3px solid var(--line);
       background:#fff;border-radius:18px;font-weight:850;font-size:clamp(1rem,2.8vw,1.2rem);padding:12px 10px
     }
     .mixed-btn:disabled{opacity:.45;cursor:not-allowed;background:var(--soft);color:#888}
+    .mode-list{display:grid;gap:12px;width:min(100%,520px);margin:0 auto}
+    .mode-card{
+      border:3px solid var(--line);background:#fff;border-radius:22px;padding:16px 14px;
+      text-align:left;width:100%
+    }
+    .mode-card strong{display:block;font-size:clamp(1.1rem,3vw,1.35rem);margin-bottom:4px}
+    .mode-card span{color:var(--muted);font-size:.95rem}
+    .back-link{
+      margin:14px auto 0;border:0;background:transparent;color:var(--muted);
+      font-weight:750;text-decoration:underline;min-height:44px;padding:8px 12px
+    }
     .change-unit{
       display:none;margin:10px auto 0;border:0;background:transparent;color:var(--muted);
       font-weight:750;font-size:.95rem;text-decoration:underline;min-height:44px;padding:8px 12px
     }
     .change-unit.show{display:inline-flex;align-items:center;justify-content:center}
-    .game.hide{display:none}
+    .big-btn{
+      width:min(100%,420px);margin:0 auto 12px;min-height:72px;border:3px solid var(--line);
+      background:#fff;border-radius:22px;font-weight:850;font-size:clamp(1.05rem,3vw,1.3rem);padding:14px 12px;display:block
+    }
+    .big-btn.primary{background:#111;color:#fff;border-color:#111}
+    .big-btn.listening{background:#fff7d6;border-color:#f1d46b}
+    .heard{
+      margin:8px auto 12px;width:min(100%,420px);min-height:48px;padding:12px;
+      background:var(--soft);border-radius:16px;text-align:center;font-weight:750;
+      overflow-wrap:anywhere
+    }
+    .fallback{width:min(100%,420px);margin:0 auto 12px;display:none;gap:8px}
+    .fallback.show{display:flex;flex-wrap:wrap;justify-content:center}
+    .fallback input{
+      flex:1 1 180px;min-height:48px;border:2px solid var(--line);border-radius:14px;padding:10px 12px;font-size:1.05rem
+    }
+    .fallback button{
+      min-height:48px;border:0;background:#111;color:#fff;border-radius:14px;padding:0 16px;font-weight:800
+    }
+    .letters{
+      display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:12px auto;width:min(100%,520px)
+    }
+    .letters .ch{
+      min-width:36px;min-height:48px;padding:8px 10px;border-radius:12px;border:2px solid var(--line);
+      background:#fff;font-weight:900;font-size:1.25rem;display:inline-flex;align-items:center;justify-content:center
+    }
+    .letters .ch.space{min-width:24px;border-style:dashed;color:var(--muted);font-size:.85rem}
+    .letters .ch.on{background:#fff7d6;border-color:#f1d46b;transform:scale(1.06)}
+    .next-word{
+      display:none;width:min(100%,320px);margin:12px auto 0;min-height:54px;border:0;background:#111;color:#fff;
+      border-radius:16px;font-weight:900;padding:0 20px
+    }
+    .next-word.show{display:inline-flex;align-items:center;justify-content:center}
+    .score-wrap.hide-points .score,.score-wrap.hide-points .meta #worth{visibility:hidden}
     @media (max-width:640px){
       html,body{max-width:100%;overflow-x:hidden}
-      .page,.status,.answers,.answer,.help,.help-btn,.brand,.brand-copy,.meta,.feedback,.clue,.finish,.menu,.unit-grid,.unit-btn,.mixed-btn{min-width:0;max-width:100%}
+      .page,.status,.answers,.answer,.help,.help-btn,.brand,.brand-copy,.meta,.feedback,.clue,.finish,.menu,.mode-select,.unit-grid,.unit-btn,.mixed-btn,.mode-card,.big-btn,.heard,.letters{min-width:0;max-width:100%}
       .page{padding:12px 10px 18px;width:100%}
       .hero{padding-top:4px;padding-bottom:12px}
       .hero h1{font-size:clamp(1.55rem,7vw,2.1rem)}
@@ -157,17 +199,16 @@
       .yazmin-wrap{width:min(100%,340px);margin-bottom:10px}
       .spelling-score-value{font-size:clamp(2.1rem,11vw,2.8rem);margin-bottom:10px}
       .finish .final-score{font-size:1.35rem}
-      .newgame,.practice{min-height:54px;width:100%}
+      .newgame,.practice,.next-word{min-height:54px;width:100%}
       .unit-grid{gap:8px}
       .unit-btn,.mixed-btn{min-height:56px;border-radius:16px}
+      .big-btn{min-height:64px}
+      .letters .ch{min-width:30px;min-height:42px;font-size:1.05rem}
     }
     @media (max-width:430px){
       .page{padding:10px 8px 16px}
       .answers{gap:7px}
-      .answer{
-        min-height:68px;padding:10px 6px;border-radius:16px;
-        font-size:clamp(.85rem,3.4vw,1.15rem)
-      }
+      .answer{min-height:68px;padding:10px 6px;border-radius:16px;font-size:clamp(.85rem,3.4vw,1.15rem)}
       .help{gap:5px}
       .help-btn{min-height:52px;font-size:clamp(.68rem,2.7vw,.88rem);padding:6px 3px}
       .status{gap:6px}
@@ -177,10 +218,7 @@
       .page{padding:8px 6px 14px}
       .hero h1{font-size:clamp(1.4rem,6.5vw,1.7rem)}
       .status h2{font-size:1.1rem}
-      .answer{
-        min-height:64px;padding:8px 4px;
-        font-size:clamp(.8rem,3.2vw,1.05rem)
-      }
+      .answer{min-height:64px;padding:8px 4px;font-size:clamp(.8rem,3.2vw,1.05rem)}
       .help-btn{min-height:50px;font-size:clamp(.64rem,2.5vw,.82rem)}
       .brand{padding:10px}
       .brand-sub{font-size:.8rem}
@@ -205,23 +243,61 @@
       <button id="mixedBtn" class="mixed-btn" type="button" data-unit="mixed">🎯 Mixed Challenge</button>
     </section>
 
+    <section id="modeSelect" class="mode-select hide" aria-label="Practice mode selection">
+      <h2 class="menu-title">How do you want to practice?</h2>
+      <div class="mode-list">
+        <button type="button" class="mode-card" data-mode="choose">
+          <strong>👀 Choose the Spelling</strong>
+          <span>Find the correctly spelled word</span>
+        </button>
+        <button type="button" class="mode-card" data-mode="spell">
+          <strong>🎤 Spell the Word</strong>
+          <span>Hear it, then spell it out loud</span>
+        </button>
+        <button type="button" class="mode-card" data-mode="hear">
+          <strong>🔊 Hear the Spelling</strong>
+          <span>Listen and learn how the word is spelled</span>
+        </button>
+      </div>
+      <button id="backToUnits" class="back-link" type="button">← Choose another unit</button>
+    </section>
+
     <section id="game" class="game hide" aria-live="polite">
-      <div class="status">
+      <div class="status score-wrap" id="statusWrap">
         <div>
-          <h2>Which spelling is correct?</h2>
-          <div id="progress" class="progress">Word 1 · 19 remaining</div>
+          <h2 id="promptTitle">Which spelling is correct?</h2>
+          <div id="progress" class="progress">Word 1 · 4 remaining</div>
         </div>
-        <div class="score">
+        <div class="score" id="scoreBox">
           <div><strong>⭐ <span id="score">0</span></strong></div>
           <div>🔥 <span id="streak">0</span> streak</div>
         </div>
       </div>
 
-      <div class="answers" aria-label="Answer choices">
-        <button class="answer" id="a0" type="button">dere</button>
-        <button class="answer" id="a1" type="button">deeer</button>
-        <button class="answer" id="a2" type="button">dear</button>
-        <button class="answer" id="a3" type="button">deer</button>
+      <div id="choosePanel" class="panel">
+        <div class="answers" aria-label="Answer choices">
+          <button class="answer" id="a0" type="button">dere</button>
+          <button class="answer" id="a1" type="button">deeer</button>
+          <button class="answer" id="a2" type="button">dear</button>
+          <button class="answer" id="a3" type="button">deer</button>
+        </div>
+      </div>
+
+      <div id="spellPanel" class="panel hide">
+        <button id="spellHearWord" class="big-btn" type="button">🔊 Hear Word</button>
+        <button id="micBtn" class="big-btn primary" type="button">🎤 Tap and spell the word</button>
+        <div id="heardBox" class="heard" aria-live="polite">I heard: —</div>
+        <div id="spellFallback" class="fallback">
+          <input id="spellInput" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Type the spelling" />
+          <button id="spellSubmit" type="button">Check</button>
+        </div>
+      </div>
+
+      <div id="hearPanel" class="panel hide">
+        <button id="learnHearWord" class="big-btn" type="button">🔊 Hear Word</button>
+        <button id="learnHearSpelling" class="big-btn" type="button">🔤 Hear the Spelling</button>
+        <div id="letterBoard" class="letters" aria-live="polite"></div>
+        <button id="nextWordBtn" class="next-word" type="button">Next Word →</button>
       </div>
 
       <div id="feedback" class="feedback" role="status">👀 Look carefully. One is correct.</div>
@@ -234,7 +310,7 @@
 
       <div id="clue" class="clue" role="status"></div>
 
-      <div class="meta">
+      <div class="meta" id="metaRow">
         <span id="stats">✓ 0 correct · ✕ 0 mistakes</span>
         <span id="worth">Worth ⭐ 100 pts</span>
       </div>
@@ -269,291 +345,6 @@
   </main>
 
   <script src="words.js"></script>
-  <script>
-  (() => {
-    const BOOKING_URL = "https://wa.me/524771547387?text=Hola%20Smile%20Alegr%C3%ADa%2C%20quiero%20agendar%20una%20cita%20de%20valoraci%C3%B3n.";
-    const ROUND_SIZE = 20;
-    const AVATARS = {
-      wow: {src:"yazmin-wow.png", heading:"WOW! You crushed it!", alt:"Yazmin celebrating — wow you crushed it"},
-      good: {src:"yazmin-good-job.png", heading:"Good Job!", alt:"Yazmin giving a thumbs up — good job"},
-      retry: {src:"yazmin-are-you-kidding.png", heading:"Are you kidding me? 😜", alt:"Yazmin teasing — are you kidding me, try again"}
-    };
-
-    const $ = (id) => document.getElementById(id);
-    const answerButtons = [0,1,2,3].map(i => $("a"+i));
-
-    let activeUnit = null;
-    let words = [];
-    let queue = [];
-    let current = null;
-    let attempts = 0;
-    let score = 0;
-    let streak = 0;
-    let bestStreak = 0;
-    let correct = 0;
-    let mistakes = 0;
-    let value = 100;
-    let locked = false;
-    let mode = "main";
-    let missedWords = [];
-    let mainCorrect = 0;
-    let lockedSpellingPct = null;
-
-    function shuffle(arr){
-      for(let i=arr.length-1;i>0;i--){
-        const j=Math.floor(Math.random()*(i+1));
-        [arr[i],arr[j]]=[arr[j],arr[i]];
-      }
-      return arr;
-    }
-
-    function showView(view){
-      $("menu").classList.toggle("hide", view !== "menu");
-      $("game").classList.toggle("hide", view !== "game");
-      if(view === "finish") $("finish").classList.add("show");
-      else $("finish").classList.remove("show");
-    }
-
-    function buildMenu(){
-      const grid = $("unitGrid");
-      grid.innerHTML = "";
-      for(let n=1;n<=9;n++){
-        const key = "unit" + n;
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "unit-btn";
-        btn.dataset.unit = key;
-        const playable = isUnitPlayable(key);
-        btn.disabled = !playable;
-        if(playable){
-          btn.textContent = "Unit " + n;
-        } else {
-          btn.innerHTML = "Unit " + n + '<span class="soon">Coming soon</span>';
-        }
-        btn.addEventListener("click", () => startUnit(key));
-        grid.appendChild(btn);
-      }
-      const mixed = $("mixedBtn");
-      const mixedOk = isUnitPlayable("mixed");
-      mixed.disabled = !mixedOk;
-      mixed.innerHTML = mixedOk
-        ? "🎯 Mixed Challenge"
-        : '🎯 Mixed Challenge<span class="soon">Coming soon</span>';
-    }
-
-    function selectRoundWords(){
-      if(words.length < ROUND_SIZE){
-        throw new Error("Selected unit needs at least " + ROUND_SIZE + " words");
-      }
-      return shuffle(words.map((_,i)=>i)).slice(0, ROUND_SIZE);
-    }
-
-    function spellingPercent(){
-      if(lockedSpellingPct !== null) return lockedSpellingPct;
-      return Math.round((mainCorrect / ROUND_SIZE) * 100);
-    }
-
-    function showResults(){
-      if(mode === "main" && lockedSpellingPct === null){
-        lockedSpellingPct = Math.round((mainCorrect / ROUND_SIZE) * 100);
-      }
-      const pct = spellingPercent();
-      let tier = AVATARS.retry;
-      if(pct >= 90) tier = AVATARS.wow;
-      else if(pct >= 75) tier = AVATARS.good;
-
-      $("finishHeading").textContent = tier.heading;
-      const img = $("yazminAvatar");
-      img.src = tier.src;
-      img.alt = tier.alt;
-      $("spellingScore").textContent = pct + "%";
-      $("finalScore").textContent = "⭐ " + score + " points";
-      $("finalStats").textContent = "🔥 Best streak: " + bestStreak;
-      const practiceBtn = $("practiceMistakes");
-      if(missedWords.length > 0) practiceBtn.classList.add("show");
-      else practiceBtn.classList.remove("show");
-      $("changeUnit").classList.add("show");
-      showView("finish");
-    }
-
-    function startUnit(unitKey){
-      if(!isUnitPlayable(unitKey)) return;
-      activeUnit = unitKey;
-      words = getUnitWordList(unitKey);
-      if(words.length < ROUND_SIZE) return;
-      resetGame();
-    }
-
-    function resetGame(){
-      if(!activeUnit || words.length < ROUND_SIZE){
-        goToMenu();
-        return;
-      }
-      mode = "main";
-      queue = selectRoundWords();
-      current = null;
-      attempts = score = streak = bestStreak = correct = mistakes = mainCorrect = 0;
-      value = 100;
-      locked = false;
-      missedWords = [];
-      lockedSpellingPct = null;
-      $("practiceMistakes").classList.remove("show");
-      showView("game");
-      nextWord();
-    }
-
-    function goToMenu(){
-      activeUnit = null;
-      words = [];
-      mode = "main";
-      lockedSpellingPct = null;
-      missedWords = [];
-      $("practiceMistakes").classList.remove("show");
-      $("changeUnit").classList.remove("show");
-      buildMenu();
-      showView("menu");
-    }
-
-    function startPractice(){
-      if(missedWords.length === 0) return;
-      mode = "review";
-      queue = shuffle(missedWords.slice());
-      current = null;
-      attempts = 0;
-      locked = false;
-      showView("game");
-      nextWord();
-    }
-
-    function nextWord(){
-      if(queue.length===0){
-        showResults();
-        return;
-      }
-
-      current = queue.shift();
-      attempts += 1;
-      value = 100;
-      locked = false;
-
-      const item = words[current];
-      const options = shuffle([item.word, ...item.wrong.slice()]);
-
-      answerButtons.forEach((btn,i)=>{
-        btn.disabled = false;
-        btn.className = "answer";
-        btn.textContent = options[i];
-      });
-
-      if(mode === "main"){
-        $("progress").textContent = `Word ${attempts} · ${queue.length} remaining`;
-      } else {
-        $("progress").textContent = `Practice · ${queue.length} remaining`;
-      }
-      $("feedback").textContent = "👀 Look carefully. One is correct.";
-      $("clue").className = "clue";
-      $("clue").textContent = "";
-      updateMeta();
-    }
-
-    function updateMeta(){
-      $("score").textContent = score;
-      $("streak").textContent = streak;
-      $("stats").textContent = `✓ ${correct} correct · ✕ ${mistakes} mistakes`;
-      $("worth").textContent = `Worth ⭐ ${value} pts`;
-    }
-
-    function showClue(text){
-      const clue = $("clue");
-      clue.textContent = text;
-      clue.className = "clue show";
-    }
-
-    function useHelp(kind){
-      if(locked) return;
-      value = Math.max(50, value - 25);
-      const item = words[current];
-      if(kind==="definition") showClue("💡 " + item.definition);
-      if(kind==="sentence") showClue("💬 " + item.sentence);
-      updateMeta();
-    }
-
-    function hearWord(){
-      if(locked) return;
-      value = Math.max(50, value - 25);
-      updateMeta();
-
-      if("speechSynthesis" in window){
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(words[current].word);
-        u.lang = "en-US";
-        u.rate = 0.78;
-        window.speechSynthesis.speak(u);
-      } else {
-        showClue("🔊 Audio is not available on this device.");
-      }
-    }
-
-    function choose(btn){
-      if(locked) return;
-      locked = true;
-      const answer = words[current].word;
-      const chosen = btn.textContent;
-
-      if(chosen===answer){
-        btn.classList.add("correct");
-        btn.textContent = "✓ " + answer;
-        correct += 1;
-        streak += 1;
-        if(streak > bestStreak) bestStreak = streak;
-        score += value;
-        if(mode === "main") mainCorrect += 1;
-        $("feedback").textContent = `⭐ Correct! +${value} points`;
-      } else {
-        btn.classList.add("wrong");
-        btn.textContent = "✕ " + chosen;
-        mistakes += 1;
-        streak = 0;
-        if(mode === "main"){
-          if(!missedWords.includes(current)) missedWords.push(current);
-          $("feedback").textContent = `Almost! The correct spelling is ${answer}.`;
-        } else {
-          queue.push(current);
-          $("feedback").textContent = `Almost! The correct spelling is ${answer}. You will see it again.`;
-        }
-        answerButtons.forEach(b=>{
-          if(b.textContent===answer){
-            b.classList.add("correct");
-            b.textContent = "✓ " + answer;
-          }
-        });
-      }
-
-      updateMeta();
-      answerButtons.forEach(b=>b.disabled=true);
-      window.setTimeout(nextWord, 1400);
-    }
-
-    answerButtons.forEach(btn=>btn.addEventListener("click",()=>choose(btn)));
-    $("define").addEventListener("click",()=>useHelp("definition"));
-    $("sentence").addEventListener("click",()=>useHelp("sentence"));
-    $("hear").addEventListener("click",hearWord);
-    $("restart").addEventListener("click",resetGame);
-    $("practiceMistakes").addEventListener("click",startPractice);
-    $("changeUnit").addEventListener("click",goToMenu);
-    $("mixedBtn").addEventListener("click",()=>startUnit("mixed"));
-
-    $("bookingLink").href = BOOKING_URL;
-
-    if("serviceWorker" in navigator){
-      window.addEventListener("load",()=>{
-        navigator.serviceWorker.register("sw.js").catch(()=>{});
-      });
-    }
-
-    buildMenu();
-    showView("menu");
-  })();
-  </script>
+  <script src="game.js"></script>
 </body>
 </html>
