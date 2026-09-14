@@ -43,7 +43,7 @@
       transition:transform .08s ease,border-color .15s ease,background .15s ease;
     }
     .answer:active{transform:scale(.99)}
-    .answer:focus-visible,.help-btn:focus-visible,.cta:focus-visible,.newgame:focus-visible,.unit-btn:focus-visible,.mixed-btn:focus-visible,.practice:focus-visible,.change-unit:focus-visible,.mode-card:focus-visible,.big-btn:focus-visible,.next-word:focus-visible{
+    .answer:focus-visible,.help-btn:focus-visible,.cta:focus-visible,.newgame:focus-visible,.unit-btn:focus-visible,.mixed-btn:focus-visible,.practice:focus-visible,.change-unit:focus-visible,.mode-card:focus-visible,.big-btn:focus-visible,.next-word:focus-visible,.back-btn:focus-visible{
       outline:4px solid rgba(255,216,77,.6);outline-offset:3px
     }
     .answer.correct{border-color:#8bd3a9;background:#f1fbf5;color:#0d5e35}
@@ -116,17 +116,27 @@
       background:#fff;border-radius:18px;font-weight:850;font-size:clamp(1rem,2.8vw,1.2rem);padding:12px 10px
     }
     .mixed-btn:disabled{opacity:.45;cursor:not-allowed;background:var(--soft);color:#888}
-    .mode-list{display:grid;gap:12px;width:min(100%,520px);margin:0 auto}
+    .nav-row{display:flex;align-items:center;min-height:44px;margin:0 0 8px}
+    .nav-row.hide{display:none}
+    .back-btn{
+      border:0;background:transparent;color:var(--muted);font-weight:750;
+      min-height:44px;min-width:44px;padding:8px 10px 8px 0;border-radius:12px;
+      font-size:1rem;text-align:left
+    }
+    .back-btn:hover{color:var(--text)}
+    .mode-list{
+      display:grid;gap:14px;width:min(100%,640px);margin:0 auto;
+      grid-template-columns:1fr
+    }
+    @media (min-width:700px){
+      .mode-list{grid-template-columns:1fr 1fr}
+    }
     .mode-card{
-      border:3px solid var(--line);background:#fff;border-radius:22px;padding:16px 14px;
-      text-align:left;width:100%
+      border:3px solid var(--line);background:#fff;border-radius:22px;padding:22px 16px;
+      text-align:center;width:100%;min-height:120px
     }
-    .mode-card strong{display:block;font-size:clamp(1.1rem,3vw,1.35rem);margin-bottom:4px}
+    .mode-card strong{display:block;font-size:clamp(1.15rem,3vw,1.4rem);margin-bottom:6px}
     .mode-card span{color:var(--muted);font-size:.95rem}
-    .back-link{
-      margin:14px auto 0;border:0;background:transparent;color:var(--muted);
-      font-weight:750;text-decoration:underline;min-height:44px;padding:8px 12px
-    }
     .change-unit{
       display:none;margin:10px auto 0;border:0;background:transparent;color:var(--muted);
       font-weight:750;font-size:.95rem;text-decoration:underline;min-height:44px;padding:8px 12px
@@ -137,20 +147,6 @@
       background:#fff;border-radius:22px;font-weight:850;font-size:clamp(1.05rem,3vw,1.3rem);padding:14px 12px;display:block
     }
     .big-btn.primary{background:#111;color:#fff;border-color:#111}
-    .big-btn.listening{background:#fff7d6;border-color:#f1d46b}
-    .heard{
-      margin:8px auto 12px;width:min(100%,420px);min-height:48px;padding:12px;
-      background:var(--soft);border-radius:16px;text-align:center;font-weight:750;
-      overflow-wrap:anywhere
-    }
-    .fallback{width:min(100%,420px);margin:0 auto 12px;display:none;gap:8px}
-    .fallback.show{display:flex;flex-wrap:wrap;justify-content:center}
-    .fallback input{
-      flex:1 1 180px;min-height:48px;border:2px solid var(--line);border-radius:14px;padding:10px 12px;font-size:1.05rem
-    }
-    .fallback button{
-      min-height:48px;border:0;background:#111;color:#fff;border-radius:14px;padding:0 16px;font-weight:800
-    }
     .letters{
       display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:12px auto;width:min(100%,520px)
     }
@@ -237,6 +233,10 @@
       <p>Practice · Learn · Master</p>
     </section>
 
+    <div id="navRow" class="nav-row hide">
+      <button id="backBtn" class="back-btn" type="button">← Back</button>
+    </div>
+
     <section id="menu" class="menu" aria-label="Unit selection">
       <h2 class="menu-title">Choose your challenge</h2>
       <div class="unit-grid" id="unitGrid"></div>
@@ -250,16 +250,11 @@
           <strong>👀 Choose the Spelling</strong>
           <span>Find the correctly spelled word</span>
         </button>
-        <button type="button" class="mode-card" data-mode="spell">
-          <strong>🎤 Spell the Word</strong>
-          <span>Hear it, then spell it out loud</span>
-        </button>
         <button type="button" class="mode-card" data-mode="hear">
           <strong>🔊 Hear the Spelling</strong>
           <span>Listen and learn how the word is spelled</span>
         </button>
       </div>
-      <button id="backToUnits" class="back-link" type="button">← Choose another unit</button>
     </section>
 
     <section id="game" class="game hide" aria-live="polite">
@@ -280,16 +275,6 @@
           <button class="answer" id="a1" type="button">deeer</button>
           <button class="answer" id="a2" type="button">dear</button>
           <button class="answer" id="a3" type="button">deer</button>
-        </div>
-      </div>
-
-      <div id="spellPanel" class="panel hide">
-        <button id="spellHearWord" class="big-btn" type="button">🔊 Hear Word</button>
-        <button id="micBtn" class="big-btn primary" type="button">🎤 Tap and spell the word</button>
-        <div id="heardBox" class="heard" aria-live="polite">I heard: —</div>
-        <div id="spellFallback" class="fallback">
-          <input id="spellInput" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Type the spelling" />
-          <button id="spellSubmit" type="button">Check</button>
         </div>
       </div>
 

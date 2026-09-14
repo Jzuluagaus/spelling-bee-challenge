@@ -9,10 +9,9 @@
 
   const $ = (id) => document.getElementById(id);
   const answerButtons = [0,1,2,3].map(i => $("a"+i));
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
   let activeUnit = null;
-  let gameMode = null; // choose | spell | hear
+  let gameMode = null; // choose | hear
   let words = [];
   let queue = [];
   let current = null;
@@ -28,8 +27,7 @@
   let missedWords = [];
   let mainCorrect = 0;
   let lockedSpellingPct = null;
-  let recognition = null;
-  let recognizing = false;
+  let currentView = "menu"; // menu | mode | game | finish
 
   function shuffle(arr){
     for(let i=arr.length-1;i>0;i--){
@@ -64,27 +62,50 @@
     return String(word).split("");
   }
 
-  function formatHeard(lettersJoined){
-    const chars = String(lettersJoined).toUpperCase().split("");
-    return chars.length ? chars.join("-") : "—";
-  }
-
-  function normalizeSpelling(raw){
-    return String(raw || "")
-      .toLowerCase()
-      .replace(/[^a-z0-9áéíóúüñ]/gi, "");
-  }
-
-  function normalizeAnswer(word){
-    return normalizeSpelling(word);
+  // Match misspelling presentation to the official word's capitalization style
+  // without altering the official vocabulary string itself.
+  function styleLikeOfficial(official, candidate){
+    if(!official || candidate == null) return candidate;
+    const o0 = official.charAt(0);
+    const c0 = String(candidate).charAt(0);
+    if(!o0 || !c0) return candidate;
+    const officialLowerStart = o0 === o0.toLowerCase() && o0 !== o0.toUpperCase();
+    const officialUpperStart = o0 === o0.toUpperCase() && o0 !== o0.toLowerCase();
+    if(officialLowerStart){
+      return c0.toLowerCase() + String(candidate).slice(1);
+    }
+    if(officialUpperStart){
+      // Keep stored misspellings, but if they start with a letter, mirror leading case
+      return c0.toUpperCase() + String(candidate).slice(1);
+    }
+    return candidate;
   }
 
   function showView(view){
+    currentView = view;
     $("menu").classList.toggle("hide", view !== "menu");
     $("modeSelect").classList.toggle("hide", view !== "mode");
     $("game").classList.toggle("hide", view !== "game");
     if(view === "finish") $("finish").classList.add("show");
     else $("finish").classList.remove("show");
+    $("navRow").classList.toggle("hide", view === "menu");
+  }
+
+  function goBack(){
+    cancelSpeech();
+    if(currentView === "game" || currentView === "finish"){
+      // Return to mode selection for the same unit; next play starts a fresh round
+      locked = false;
+      phase = "main";
+      queue = [];
+      current = null;
+      $("practiceMistakes").classList.remove("show");
+      showModeSelect();
+      return;
+    }
+    if(currentView === "mode"){
+      goToMenu();
+    }
   }
 
   function buildMenu(){
@@ -98,8 +119,8 @@
       btn.dataset.unit = key;
       const playable = isUnitPlayable(key);
       btn.disabled = !playable;
-      btn.textContent = playable ? ("Unit " + n) : "";
-      if(!playable) btn.innerHTML = "Unit " + n + '<span class="soon">Coming soon</span>';
+      if(playable) btn.textContent = "Unit " + n;
+      else btn.innerHTML = "Unit " + n + '<span class="soon">Coming soon</span>';
       btn.addEventListener("click", () => selectUnit(key));
       grid.appendChild(btn);
     }
@@ -140,10 +161,9 @@
     $("finalScore").textContent = "⭐ " + score + " points";
     $("finalStats").textContent = "🔥 Best streak: " + bestStreak;
     const practiceBtn = $("practiceMistakes");
-    if(gameMode !== "hear" && missedWords.length > 0) practiceBtn.classList.add("show");
+    if(gameMode === "choose" && missedWords.length > 0) practiceBtn.classList.add("show");
     else practiceBtn.classList.remove("show");
     $("changeUnit").classList.add("show");
-    stopRecognition();
     cancelSpeech();
     showView("finish");
   }
@@ -154,6 +174,15 @@
     words = getUnitWordList(unitKey);
     if(words.length < ROUND_SIZE) return;
     gameMode = null;
+    showModeSelect();
+  }
+
+  function showModeSelect(){
+    if(!activeUnit){
+      goToMenu();
+      return;
+    }
+    words = getUnitWordList(activeUnit);
     showView("mode");
   }
 
@@ -164,16 +193,12 @@
 
   function applyModeChrome(){
     $("choosePanel").classList.toggle("hide", gameMode !== "choose");
-    $("spellPanel").classList.toggle("hide", gameMode !== "spell");
     $("hearPanel").classList.toggle("hide", gameMode !== "hear");
     $("statusWrap").classList.toggle("hide-points", gameMode === "hear");
     $("hear").style.display = gameMode === "choose" ? "" : "none";
     if(gameMode === "choose"){
       $("promptTitle").textContent = "Which spelling is correct?";
       $("feedback").textContent = "👀 Look carefully. One is correct.";
-    } else if(gameMode === "spell"){
-      $("promptTitle").textContent = "Spell the word";
-      $("feedback").textContent = "🔊 Hear the word, then spell the letters.";
     } else {
       $("promptTitle").textContent = "Hear the spelling";
       $("feedback").textContent = "Listen and learn. Tap Next Word when ready.";
@@ -194,9 +219,6 @@
     missedWords = [];
     lockedSpellingPct = null;
     $("practiceMistakes").classList.remove("show");
-    $("spellFallback").classList.remove("show");
-    $("spellInput").value = "";
-    $("heardBox").textContent = "I heard: —";
     $("nextWordBtn").classList.remove("show");
     applyModeChrome();
     showView("game");
@@ -204,7 +226,6 @@
   }
 
   function goToMenu(){
-    stopRecognition();
     cancelSpeech();
     activeUnit = null;
     gameMode = null;
@@ -219,7 +240,7 @@
   }
 
   function startPractice(){
-    if(missedWords.length === 0 || gameMode === "hear") return;
+    if(missedWords.length === 0 || gameMode !== "choose") return;
     phase = "review";
     queue = shuffle(missedWords.slice());
     current = null;
@@ -236,13 +257,13 @@
     lettersOf(word).forEach((ch, idx) => {
       const el = document.createElement("span");
       el.className = "ch" + (ch === " " ? " space" : "") + (idx === activeIndex ? " on" : "");
-      el.textContent = ch === " " ? "—" : ch.toUpperCase();
+      // Preserve exact original letter casing from words.js
+      el.textContent = ch === " " ? " " : ch;
       board.appendChild(el);
     });
   }
 
   function nextWord(){
-    stopRecognition();
     cancelSpeech();
     if(queue.length===0){
       showResults();
@@ -255,6 +276,7 @@
     locked = false;
 
     const item = words[current];
+    const official = item.word;
 
     if(phase === "main"){
       $("progress").textContent = `Word ${attempts} · ${queue.length} remaining`;
@@ -264,28 +286,21 @@
 
     $("clue").className = "clue";
     $("clue").textContent = "";
-    $("heardBox").textContent = "I heard: —";
-    $("spellInput").value = "";
-    $("micBtn").classList.remove("listening");
-    $("micBtn").textContent = "🎤 Tap and spell the word";
     $("nextWordBtn").classList.remove("show");
 
     if(gameMode === "choose"){
-      const options = shuffle([item.word, ...item.wrong.slice()]);
+      const options = shuffle([
+        official,
+        ...item.wrong.map((w) => styleLikeOfficial(official, w))
+      ]);
       answerButtons.forEach((btn,i)=>{
         btn.disabled = false;
         btn.className = "answer";
-        btn.textContent = options[i];
+        btn.textContent = options[i]; // exact official string for the correct option
       });
       $("feedback").textContent = "👀 Look carefully. One is correct.";
-    } else if(gameMode === "spell"){
-      $("feedback").textContent = "🔊 Hear the word, then spell the letters.";
-      if(!SpeechRecognition){
-        $("spellFallback").classList.add("show");
-        $("feedback").textContent = "🎤 Voice spelling isn’t available here. Type the spelling instead.";
-      }
     } else {
-      renderLetterBoard(item.word, -1);
+      renderLetterBoard(official, -1);
       $("feedback").textContent = "Listen and learn. Tap Next Word when ready.";
       $("nextWordBtn").classList.add("show");
     }
@@ -321,8 +336,7 @@
       value = Math.max(50, value - 25);
       updateMeta();
     }
-    const word = words[current].word;
-    speakText(word, 0.78);
+    speakText(words[current].word, 0.78);
   }
 
   async function hearSpellingLetters(){
@@ -346,7 +360,7 @@
     $("nextWordBtn").classList.add("show");
   }
 
-  function markResult(isCorrect, answerDisplay){
+  function markResult(isCorrect, answer){
     if(isCorrect){
       correct += 1;
       streak += 1;
@@ -359,10 +373,10 @@
       streak = 0;
       if(phase === "main"){
         if(!missedWords.includes(current)) missedWords.push(current);
-        $("feedback").textContent = `Almost! The correct spelling is ${answerDisplay}`;
+        $("feedback").textContent = `Almost! The correct spelling is ${answer}.`;
       } else {
         queue.push(current);
-        $("feedback").textContent = `Almost! The correct spelling is ${answerDisplay}. You will see it again.`;
+        $("feedback").textContent = `Almost! The correct spelling is ${answer}. You will see it again.`;
       }
     }
     updateMeta();
@@ -371,10 +385,10 @@
   function choose(btn){
     if(locked || gameMode !== "choose") return;
     locked = true;
-    const answer = words[current].word;
+    const answer = words[current].word; // exact official string
     const chosen = btn.textContent;
 
-    if(chosen===answer){
+    if(chosen === answer){
       btn.classList.add("correct");
       btn.textContent = "✓ " + answer;
       markResult(true, answer);
@@ -383,7 +397,7 @@
       btn.textContent = "✕ " + chosen;
       markResult(false, answer);
       answerButtons.forEach(b=>{
-        if(b.textContent===answer){
+        if(b.textContent === answer){
           b.classList.add("correct");
           b.textContent = "✓ " + answer;
         }
@@ -392,94 +406,6 @@
 
     answerButtons.forEach(b=>b.disabled=true);
     window.setTimeout(nextWord, 1400);
-  }
-
-  function gradeSpelled(raw){
-    if(locked || gameMode !== "spell") return;
-    locked = true;
-    stopRecognition();
-    const answer = words[current].word;
-    const heardNorm = normalizeSpelling(raw);
-    const answerNorm = normalizeAnswer(answer);
-    const display = formatHeard(heardNorm || normalizeSpelling(raw.replace(/\s+/g,"")));
-    $("heardBox").textContent = "I heard: " + display;
-
-    const ok = heardNorm.length > 0 && heardNorm === answerNorm;
-    if(ok){
-      $("feedback").textContent = "⭐ Correct!";
-      markResult(true, formatHeard(answerNorm));
-    } else {
-      markResult(false, formatHeard(answerNorm));
-      // markResult already set Almost text with answerDisplay
-      $("feedback").textContent = "Almost! The correct spelling is " + formatHeard(answerNorm);
-    }
-    window.setTimeout(nextWord, 1600);
-  }
-
-  function stopRecognition(){
-    recognizing = false;
-    $("micBtn").classList.remove("listening");
-    $("micBtn").textContent = "🎤 Tap and spell the word";
-    try{ if(recognition) recognition.stop(); }catch(e){}
-  }
-
-  function startRecognition(){
-    if(locked || gameMode !== "spell") return;
-    if(!SpeechRecognition){
-      $("spellFallback").classList.add("show");
-      $("feedback").textContent = "🎤 Voice spelling isn’t available here. Type the spelling instead.";
-      return;
-    }
-    if(recognizing){
-      stopRecognition();
-      return;
-    }
-    recognition = new SpeechRecognition();
-    recognition.lang = "en-US";
-    recognition.interimResults = true;
-    recognition.maxAlternatives = 3;
-    recognition.continuous = false;
-
-    recognizing = true;
-    $("micBtn").classList.add("listening");
-    $("micBtn").textContent = "🎤 Listening… tap to stop";
-    $("feedback").textContent = "Spell the letters out loud.";
-
-    recognition.onresult = (event) => {
-      let transcript = "";
-      for(let i=0;i<event.results.length;i++){
-        transcript += event.results[i][0].transcript + " ";
-      }
-      transcript = transcript.trim();
-      const interim = formatHeard(normalizeSpelling(transcript));
-      $("heardBox").textContent = "I heard: " + interim;
-      if(event.results[event.results.length-1].isFinal){
-        gradeSpelled(transcript);
-      }
-    };
-    recognition.onerror = (event) => {
-      stopRecognition();
-      if(event.error === "not-allowed" || event.error === "service-not-allowed"){
-        $("spellFallback").classList.add("show");
-        $("feedback").textContent = "Microphone permission is off. You can type the spelling instead.";
-      } else {
-        $("spellFallback").classList.add("show");
-        $("feedback").textContent = "Couldn’t hear clearly. Try again or type the spelling.";
-      }
-    };
-    recognition.onend = () => {
-      recognizing = false;
-      $("micBtn").classList.remove("listening");
-      $("micBtn").textContent = "🎤 Tap and spell the word";
-    };
-
-    try{
-      recognition.start();
-    }catch(e){
-      stopRecognition();
-      $("spellFallback").classList.add("show");
-      $("feedback").textContent = "Microphone isn’t ready. Type the spelling instead.";
-    }
   }
 
   function advanceLearn(){
@@ -495,19 +421,13 @@
   $("define").addEventListener("click",()=>useHelp("definition"));
   $("sentence").addEventListener("click",()=>useHelp("sentence"));
   $("hear").addEventListener("click",()=>hearCurrentWord(true));
-  $("spellHearWord").addEventListener("click",()=>hearCurrentWord(false));
   $("learnHearWord").addEventListener("click",()=>hearCurrentWord(false));
   $("learnHearSpelling").addEventListener("click",()=>hearSpellingLetters());
-  $("micBtn").addEventListener("click", startRecognition);
-  $("spellSubmit").addEventListener("click", ()=>gradeSpelled($("spellInput").value));
-  $("spellInput").addEventListener("keydown", (e)=>{
-    if(e.key === "Enter") gradeSpelled($("spellInput").value);
-  });
   $("nextWordBtn").addEventListener("click", advanceLearn);
   $("restart").addEventListener("click", resetGame);
   $("practiceMistakes").addEventListener("click", startPractice);
   $("changeUnit").addEventListener("click", goToMenu);
-  $("backToUnits").addEventListener("click", goToMenu);
+  $("backBtn").addEventListener("click", goBack);
   $("mixedBtn").addEventListener("click",()=>selectUnit("mixed"));
   document.querySelectorAll(".mode-card").forEach((btn)=>{
     btn.addEventListener("click", ()=>startMode(btn.dataset.mode));
