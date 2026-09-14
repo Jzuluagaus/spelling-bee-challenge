@@ -64,30 +64,24 @@
     }
     .clue.show{display:block}
     .meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.95rem;margin:14px 2px 0}
-    .brand{
-      margin-top:22px;background:var(--brand);border:2px solid var(--brand-border);border-radius:20px;
-      padding:14px 16px 12px;display:flex;flex-direction:column;gap:10px;max-width:100%
+    .sponsor-credit{
+      margin:28px auto 0;padding-top:8px;max-width:520px;
+      color:#9a9a9a;font-size:.78rem;line-height:1.4;text-align:center;font-weight:550
     }
-    .brand-top{display:flex;align-items:flex-start;gap:10px;min-width:0}
-    .pandita{font-size:1.7rem;line-height:1;flex:0 0 auto;margin-top:2px}
-    .brand-main{min-width:0;flex:1}
-    .brand-title{font-weight:850;font-size:clamp(1rem,2.8vw,1.15rem);line-height:1.2}
-    .brand-tagline{color:#5d5536;font-size:.9rem;margin-top:3px}
-    .brand-loc{color:#5d5536;font-size:.86rem;margin-top:8px;line-height:1.35;overflow-wrap:anywhere}
-    .brand-benefit{
-      background:#fff;border:1.5px solid var(--brand-border);border-radius:14px;
-      padding:10px 12px;text-align:center
+    .sponsor-soft{
+      margin:22px auto 0;padding:14px 12px 12px;max-width:420px;width:100%;
+      border-top:1px solid var(--line);text-align:center
     }
-    .brand-benefit-label{font-size:.82rem;font-weight:750;color:#5d5536}
-    .brand-discount{margin-top:2px;font-size:clamp(1.35rem,4vw,1.7rem);font-weight:900;letter-spacing:-.02em;color:#151515}
-    .cta{
-      background:#2b2b2b;color:#fff;text-decoration:none;border-radius:12px;
-      min-height:44px;padding:0 14px;display:inline-flex;align-items:center;justify-content:center;
-      font-weight:750;font-size:.95rem;text-align:center;align-self:stretch
+    .sponsor-soft-name{font-weight:750;font-size:.95rem;color:#444;margin-top:10px}
+    .sponsor-soft-benefit{margin-top:6px;font-size:.88rem;color:#666}
+    .sponsor-soft-discount{margin-top:4px;font-size:1.15rem;font-weight:850;color:#222;letter-spacing:-.01em}
+    .sponsor-soft-loc{margin-top:6px;font-size:.8rem;color:#888;overflow-wrap:anywhere}
+    .sponsor-cta{
+      display:inline-flex;align-items:center;justify-content:center;margin-top:10px;
+      min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid #ccc;
+      background:#fff;color:#444;text-decoration:none;font-weight:700;font-size:.88rem
     }
-    .brand-note{
-      margin:0;color:#7a7254;font-size:.72rem;line-height:1.35;text-align:center;overflow-wrap:anywhere
-    }
+    .sponsor-cta:hover{border-color:#999;color:#222}
     .finish{display:none;text-align:center;border:3px solid var(--line);border-radius:28px;padding:28px 18px 30px;max-width:100%;overflow:hidden}
     .finish.show{display:block}
     .finish-heading{font-size:clamp(1.55rem,4.5vw,2.35rem);margin:0 0 12px;line-height:1.15;letter-spacing:-.02em}
@@ -175,7 +169,7 @@
     .score-wrap.hide-points .score,.score-wrap.hide-points .meta #worth{visibility:hidden}
     @media (max-width:640px){
       html,body{max-width:100%;overflow-x:hidden}
-      .page,.status,.answers,.answer,.help,.help-btn,.brand,.meta,.feedback,.clue,.finish,.menu,.mode-select,.unit-grid,.unit-btn,.mixed-btn,.mode-card,.big-btn,.heard,.letters{min-width:0;max-width:100%}
+      .page,.status,.answers,.answer,.help,.help-btn,.sponsor-credit,.sponsor-soft,.meta,.feedback,.clue,.finish,.menu,.mode-select,.unit-grid,.unit-btn,.mixed-btn,.mode-card,.big-btn,.letters{min-width:0;max-width:100%}
       .page{padding:12px 10px 18px;width:100%}
       .hero{padding-top:4px;padding-bottom:12px}
       .hero h1{font-size:clamp(1.55rem,7vw,2.1rem)}
@@ -195,16 +189,10 @@
       .help-btn{min-height:56px;border-radius:14px;padding:8px 4px;font-size:clamp(.72rem,2.9vw,.95rem)}
       .clue{font-size:.95rem;padding:12px;overflow-wrap:anywhere}
       .meta{font-size:.85rem;gap:8px}
-      .brand{padding:12px 12px 10px;margin-top:16px;gap:8px;border-radius:18px}
-      .pandita{font-size:1.45rem}
-      .brand-title{font-size:.95rem}
-      .brand-tagline{font-size:.82rem}
-      .brand-loc{font-size:.78rem;margin-top:6px}
-      .brand-benefit{padding:8px 10px}
-      .brand-benefit-label{font-size:.75rem}
-      .brand-discount{font-size:1.25rem}
-      .cta{width:100%;font-size:.88rem;min-height:42px;padding:0 12px}
-      .brand-note{font-size:.68rem}
+      .sponsor-credit{margin-top:22px;font-size:.74rem}
+      .sponsor-soft{margin-top:18px;padding-top:12px}
+      .sponsor-soft-discount{font-size:1.05rem}
+      .sponsor-cta{min-height:40px;font-size:.84rem}
       .finish{padding:18px 10px 22px}
       .finish-heading{font-size:clamp(1.35rem,6vw,1.7rem);margin-bottom:10px}
       .yazmin-wrap{width:min(100%,340px);margin-bottom:10px}
@@ -231,9 +219,8 @@
       .status h2{font-size:1.1rem}
       .answer{min-height:64px;padding:8px 4px;font-size:clamp(.8rem,3.2vw,1.05rem)}
       .help-btn{min-height:50px;font-size:clamp(.64rem,2.5vw,.82rem)}
-      .brand{padding:10px 10px 8px;gap:7px}
-      .brand-discount{font-size:1.15rem}
-      .brand-note{font-size:.64rem}
+      .sponsor-credit{font-size:.7rem}
+      .sponsor-soft-discount{font-size:1rem}
       .yazmin-wrap{width:100%}
       .finish-heading{font-size:1.25rem}
     }
@@ -257,6 +244,7 @@
       <h2 class="menu-title">Choose your challenge</h2>
       <div class="unit-grid" id="unitGrid"></div>
       <button id="mixedBtn" class="mixed-btn" type="button" data-unit="mixed">🎯 Mixed Challenge</button>
+      <p class="sponsor-credit">🐼 An educational initiative by Smile Alegría Dental Studio</p>
     </section>
 
     <section id="modeSelect" class="mode-select hide" aria-label="Practice mode selection">
@@ -331,24 +319,14 @@
         <button id="practiceMistakes" class="practice" type="button">PRACTICE MY MISTAKES</button>
         <button id="changeUnit" class="change-unit" type="button">Choose another unit</button>
       </div>
+      <div class="sponsor-soft" aria-label="Smile Alegría Miraflores benefit">
+        <div class="sponsor-soft-name">🐼 Smile Alegría Dental Studio</div>
+        <div class="sponsor-soft-benefit">Beneficio para familias Miraflores</div>
+        <div class="sponsor-soft-discount">15% de descuento</div>
+        <div class="sponsor-soft-loc">📍 Frente al Colegio Miraflores · Torre Kenzo</div>
+        <a id="bookingLink" class="sponsor-cta" href="#" rel="noopener">Conoce tu beneficio →</a>
+      </div>
     </section>
-
-    <aside class="brand" aria-label="Smile Alegría community benefit">
-      <div class="brand-top">
-        <div class="pandita" aria-hidden="true">🐼</div>
-        <div class="brand-main">
-          <div class="brand-title">Smile Alegría Dental Studio</div>
-          <div class="brand-tagline">Sonrisas sanas para toda la familia</div>
-          <div class="brand-loc">📍 Frente al Colegio Miraflores<br>Blvd. Juan Alonso de Torres · Torre Kenzo</div>
-        </div>
-      </div>
-      <div class="brand-benefit">
-        <div class="brand-benefit-label">🎓 Beneficio exclusivo para familias Miraflores</div>
-        <div class="brand-discount">15% de descuento</div>
-      </div>
-      <a id="bookingLink" class="cta" href="#" rel="noopener">Conoce tu beneficio →</a>
-      <p class="brand-note">🐝 Spelling Bee Challenge es una iniciativa de Smile Alegría para apoyar a nuestra comunidad escolar.</p>
-    </aside>
   </main>
 
   <script src="words.js"></script>
