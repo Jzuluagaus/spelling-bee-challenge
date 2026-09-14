@@ -43,7 +43,7 @@
       transition:transform .08s ease,border-color .15s ease,background .15s ease;
     }
     .answer:active{transform:scale(.99)}
-    .answer:focus-visible,.help-btn:focus-visible,.cta:focus-visible,.newgame:focus-visible,.unit-btn:focus-visible,.mixed-btn:focus-visible,.practice:focus-visible,.change-unit:focus-visible,.mode-card:focus-visible,.big-btn:focus-visible,.next-word:focus-visible,.back-btn:focus-visible{
+    .answer:focus-visible,.help-btn:focus-visible,.cta:focus-visible,.newgame:focus-visible,.unit-btn:focus-visible,.mixed-btn:focus-visible,.practice:focus-visible,.change-unit:focus-visible,.mode-card:focus-visible,.big-btn:focus-visible,.next-word:focus-visible,.back-btn:focus-visible,.sponsor-cta:focus-visible{
       outline:4px solid rgba(255,216,77,.6);outline-offset:3px
     }
     .answer.correct{border-color:#8bd3a9;background:#f1fbf5;color:#0d5e35}
@@ -65,46 +65,57 @@
     .clue.show{display:block}
     .meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.95rem;margin:14px 2px 0}
     .sponsor-credit{
-      margin:28px auto 0;padding-top:8px;max-width:520px;
+      margin:20px auto 0;padding-top:4px;max-width:520px;
       color:#9a9a9a;font-size:.78rem;line-height:1.4;text-align:center;font-weight:550
     }
     .sponsor-soft{
-      margin:22px auto 0;padding:14px 12px 12px;max-width:420px;width:100%;
+      margin:12px auto 0;padding:10px 8px 8px;max-width:420px;width:100%;
       border-top:1px solid var(--line);text-align:center
     }
-    .sponsor-soft-name{font-weight:750;font-size:.95rem;color:#444;margin-top:10px}
-    .sponsor-soft-benefit{margin-top:6px;font-size:.88rem;color:#666}
-    .sponsor-soft-discount{margin-top:4px;font-size:1.15rem;font-weight:850;color:#222;letter-spacing:-.01em}
-    .sponsor-soft-loc{margin-top:6px;font-size:.8rem;color:#888;overflow-wrap:anywhere}
+    .sponsor-soft-line{font-size:.88rem;color:#555;margin-top:6px;line-height:1.35}
+    .sponsor-soft-line strong{font-weight:850;color:#222}
+    .sponsor-soft-name{font-weight:750;font-size:.9rem;color:#444;margin-top:6px}
+    .sponsor-soft-loc{margin-top:4px;font-size:.75rem;color:#888;overflow-wrap:anywhere}
     .sponsor-cta{
-      display:inline-flex;align-items:center;justify-content:center;margin-top:10px;
-      min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid #ccc;
-      background:#fff;color:#444;text-decoration:none;font-weight:700;font-size:.88rem
+      display:inline-flex;align-items:center;justify-content:center;margin-top:8px;
+      min-height:36px;padding:0 12px;border-radius:999px;border:1.5px solid #ccc;
+      background:#fff;color:#444;text-decoration:none;font-weight:700;font-size:.82rem
     }
     .sponsor-cta:hover{border-color:#999;color:#222}
-    .finish{display:none;text-align:center;border:3px solid var(--line);border-radius:28px;padding:28px 18px 30px;max-width:100%;overflow:hidden}
+    .finish{display:none;text-align:center;border:3px solid var(--line);border-radius:24px;padding:18px 14px 16px;max-width:100%;overflow:hidden}
     .finish.show{display:block}
-    .finish-heading{font-size:clamp(1.55rem,4.5vw,2.35rem);margin:0 0 12px;line-height:1.15;letter-spacing:-.02em}
-    .yazmin-wrap{width:min(100%,420px);margin:0 auto 14px}
-    .yazmin-avatar{display:block;width:100%;height:auto;max-width:100%;border-radius:18px}
-    .spelling-score-label{margin:8px 0 0;font-weight:850;letter-spacing:.08em;font-size:clamp(.85rem,2.4vw,1rem);color:var(--muted)}
-    .spelling-score-value{margin:2px 0 14px;font-size:clamp(2.4rem,8vw,3.4rem);font-weight:900;line-height:1.05}
-    .finish .final-score{font-size:clamp(1.35rem,4vw,1.85rem);font-weight:900;margin:.2rem 0}
-    .finish .final-stats{color:var(--muted);font-size:clamp(.95rem,2.5vw,1.1rem);margin:0 0 18px}
+    .finish-heading{font-size:clamp(1.35rem,4vw,2rem);margin:0 0 8px;line-height:1.15;letter-spacing:-.02em}
+    .finish.assess .finish-heading{font-size:clamp(1.05rem,3vw,1.35rem);margin:0 0 6px;color:var(--muted);font-weight:750}
+    .finish.assess.tier-wow .finish-heading{display:none}
+    .yazmin-wrap{width:min(100%,280px);margin:0 auto 8px}
+    .yazmin-avatar{display:block;width:100%;height:auto;max-width:100%;border-radius:14px}
+    .spelling-score-label{margin:2px 0 0;font-weight:850;letter-spacing:.08em;font-size:clamp(.75rem,2.2vw,.9rem);color:var(--muted)}
+    .spelling-score-value{margin:0 0 4px;font-size:clamp(1.9rem,6.5vw,2.8rem);font-weight:900;line-height:1.05}
+    .finish .final-score{font-size:clamp(1.1rem,3.2vw,1.45rem);font-weight:900;margin:0}
+    .finish .final-stats{color:var(--muted);font-size:clamp(.85rem,2.3vw,1rem);margin:2px 0 10px}
+    .finish-scoreblock.hide,.finish-learn.hide,.yazmin-wrap.hide{display:none}
+    .finish-learn{margin:0 0 8px}
+    .learn-title{font-size:clamp(1.55rem,4.5vw,2.1rem);margin:0 0 8px;font-weight:900;letter-spacing:-.02em}
+    .learn-msg{margin:0;color:var(--muted);font-size:clamp(1rem,2.6vw,1.15rem);line-height:1.35}
+    .learn-sub{margin:8px 0 0;color:#888;font-size:.92rem}
     .newgame{
-      border:0;background:#111;color:#fff;border-radius:16px;
-      min-height:58px;padding:0 28px;font-weight:900;font-size:clamp(1.05rem,3.2vw,1.25rem);
-      letter-spacing:.04em;width:min(100%,320px)
+      border:0;background:#111;color:#fff;border-radius:14px;
+      min-height:50px;padding:0 22px;font-weight:900;font-size:clamp(.98rem,3vw,1.15rem);
+      letter-spacing:.04em;width:min(100%,300px)
     }
     .practice{
-      display:none;margin:12px auto 0;border:3px solid #111;background:#fff;color:#111;border-radius:16px;
-      min-height:54px;padding:0 22px;font-weight:900;font-size:clamp(.95rem,3vw,1.1rem);
-      letter-spacing:.04em;width:min(100%,320px)
+      display:none;margin:8px auto 0;border:2.5px solid #111;background:#fff;color:#111;border-radius:14px;
+      min-height:46px;padding:0 18px;font-weight:900;font-size:clamp(.9rem,2.8vw,1.05rem);
+      letter-spacing:.04em;width:min(100%,300px)
     }
     .practice.show{display:inline-flex;align-items:center;justify-content:center}
     .finish-actions{display:flex;flex-direction:column;align-items:center;gap:0;width:100%}
+    .page.view-finish .hero{padding:4px 0 8px}
+    .page.view-finish .hero h1{font-size:clamp(1.35rem,4vw,1.85rem)}
+    .page.view-finish .hero p{display:none}
+    .page.view-finish .nav-row{min-height:36px;margin:0 0 4px}
     .menu,.mode-select{display:block;text-align:center;max-width:100%}
-    .menu.hide,.mode-select.hide,.game.hide,.panel.hide{display:none}
+    .menu.hide,.mode-select.hide,.game.hide,.panel.hide,.hide{display:none}
     .menu-title{margin:0 0 16px;font-size:clamp(1.35rem,3.5vw,1.85rem);font-weight:850}
     .unit-grid{
       display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;
@@ -189,16 +200,26 @@
       .help-btn{min-height:56px;border-radius:14px;padding:8px 4px;font-size:clamp(.72rem,2.9vw,.95rem)}
       .clue{font-size:.95rem;padding:12px;overflow-wrap:anywhere}
       .meta{font-size:.85rem;gap:8px}
-      .sponsor-credit{margin-top:22px;font-size:.74rem}
-      .sponsor-soft{margin-top:18px;padding-top:12px}
-      .sponsor-soft-discount{font-size:1.05rem}
-      .sponsor-cta{min-height:40px;font-size:.84rem}
-      .finish{padding:18px 10px 22px}
-      .finish-heading{font-size:clamp(1.35rem,6vw,1.7rem);margin-bottom:10px}
-      .yazmin-wrap{width:min(100%,340px);margin-bottom:10px}
-      .spelling-score-value{font-size:clamp(2.1rem,11vw,2.8rem);margin-bottom:10px}
-      .finish .final-score{font-size:1.35rem}
-      .newgame,.practice,.next-word{min-height:54px;width:100%}
+      .sponsor-credit{margin-top:14px;font-size:.72rem}
+      .sponsor-soft{margin-top:10px;padding:8px 4px 6px}
+      .sponsor-soft-line{font-size:.82rem;margin-top:4px}
+      .sponsor-soft-name{font-size:.84rem;margin-top:4px}
+      .sponsor-soft-loc{font-size:.7rem}
+      .sponsor-cta{min-height:34px;font-size:.78rem;margin-top:6px}
+      .finish{padding:12px 8px 10px;border-radius:18px;border-width:2px}
+      .finish.assess .finish-heading{font-size:.95rem;margin-bottom:4px}
+      .yazmin-wrap{width:min(42vw,168px);margin-bottom:4px}
+      .spelling-score-label{font-size:.7rem}
+      .spelling-score-value{font-size:clamp(1.7rem,8vw,2.2rem);margin-bottom:2px}
+      .finish .final-score{font-size:1.05rem}
+      .finish .final-stats{font-size:.85rem;margin:0 0 8px}
+      .learn-title{font-size:1.45rem;margin-bottom:6px}
+      .learn-msg{font-size:.95rem}
+      .learn-sub{font-size:.82rem;margin-top:6px}
+      .newgame,.practice,.next-word{min-height:48px;width:100%}
+      .change-unit{min-height:36px;margin-top:6px;padding:4px 8px;font-size:.88rem}
+      .page.view-finish .hero{padding:2px 0 4px}
+      .page.view-finish .hero h1{font-size:1.25rem}
       .unit-grid{gap:8px}
       .unit-btn,.mixed-btn{min-height:56px;border-radius:16px}
       .big-btn{min-height:64px}
@@ -219,10 +240,10 @@
       .status h2{font-size:1.1rem}
       .answer{min-height:64px;padding:8px 4px;font-size:clamp(.8rem,3.2vw,1.05rem)}
       .help-btn{min-height:50px;font-size:clamp(.64rem,2.5vw,.82rem)}
-      .sponsor-credit{font-size:.7rem}
-      .sponsor-soft-discount{font-size:1rem}
-      .yazmin-wrap{width:100%}
-      .finish-heading{font-size:1.25rem}
+      .sponsor-credit{font-size:.68rem}
+      .yazmin-wrap{width:min(38vw,148px)}
+      .finish.assess .finish-heading{font-size:.88rem}
+      .learn-title{font-size:1.3rem}
     }
     @media (prefers-reduced-motion:reduce){
       *{scroll-behavior:auto!important;transition:none!important}
@@ -244,7 +265,6 @@
       <h2 class="menu-title">Choose your challenge</h2>
       <div class="unit-grid" id="unitGrid"></div>
       <button id="mixedBtn" class="mixed-btn" type="button" data-unit="mixed">🎯 Mixed Challenge</button>
-      <p class="sponsor-credit">🐼 An educational initiative by Smile Alegría Dental Studio</p>
     </section>
 
     <section id="modeSelect" class="mode-select hide" aria-label="Practice mode selection">
@@ -306,14 +326,21 @@
     </section>
 
     <section id="finish" class="finish" aria-live="polite">
+      <div id="finishLearn" class="finish-learn hide">
+        <h2 class="learn-title">🐝 Great effort!</h2>
+        <p class="learn-msg">Keep practicing, listening and learning!</p>
+        <p class="learn-sub">You practiced 5 words today.</p>
+      </div>
       <h2 id="finishHeading" class="finish-heading">WOW! You crushed it!</h2>
-      <div class="yazmin-wrap">
+      <div id="yazminWrap" class="yazmin-wrap">
         <img id="yazminAvatar" class="yazmin-avatar" src="yazmin-wow.png" alt="Yazmin celebrating your Spelling Bee result" width="840" height="840" decoding="async" />
       </div>
-      <div class="spelling-score-label">SPELLING SCORE</div>
-      <div id="spellingScore" class="spelling-score-value">0%</div>
-      <div id="finalScore" class="final-score">⭐ 0 points</div>
-      <div id="finalStats" class="final-stats">🔥 Best streak: 0</div>
+      <div id="finishScore" class="finish-scoreblock">
+        <div class="spelling-score-label">SPELLING SCORE</div>
+        <div id="spellingScore" class="spelling-score-value">0%</div>
+        <div id="finalScore" class="final-score">⭐ 0 points</div>
+        <div id="finalStats" class="final-stats">🔥 Best streak: 0</div>
+      </div>
       <div class="finish-actions">
         <button id="restart" class="newgame" type="button">PLAY AGAIN</button>
         <button id="practiceMistakes" class="practice" type="button">PRACTICE MY MISTAKES</button>
@@ -321,12 +348,13 @@
       </div>
       <div class="sponsor-soft" aria-label="Smile Alegría Miraflores benefit">
         <div class="sponsor-soft-name">🐼 Smile Alegría Dental Studio</div>
-        <div class="sponsor-soft-benefit">Beneficio para familias Miraflores</div>
-        <div class="sponsor-soft-discount">15% de descuento</div>
+        <div class="sponsor-soft-line">Familias Miraflores · <strong>15% de descuento</strong></div>
         <div class="sponsor-soft-loc">📍 Frente al Colegio Miraflores · Torre Kenzo</div>
         <a id="bookingLink" class="sponsor-cta" href="#" rel="noopener">Conoce tu beneficio →</a>
       </div>
     </section>
+
+    <p id="sponsorCredit" class="sponsor-credit">🐼 An educational initiative by Smile Alegría Dental Studio</p>
   </main>
 
   <script src="words.js"></script>

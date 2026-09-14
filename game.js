@@ -89,6 +89,7 @@
     if(view === "finish") $("finish").classList.add("show");
     else $("finish").classList.remove("show");
     $("navRow").classList.toggle("hide", view === "menu");
+    document.querySelector(".page").classList.toggle("view-finish", view === "finish");
   }
 
   function goBack(){
@@ -145,14 +146,38 @@
   }
 
   function showResults(){
+    const finish = $("finish");
+    finish.classList.remove("assess", "learn", "tier-wow", "tier-good", "tier-retry");
+    const practiceBtn = $("practiceMistakes");
+    practiceBtn.classList.remove("show");
+
+    if(gameMode === "hear"){
+      finish.classList.add("learn");
+      $("finishLearn").classList.remove("hide");
+      $("finishHeading").classList.add("hide");
+      $("yazminWrap").classList.add("hide");
+      $("finishScore").classList.add("hide");
+      $("restart").textContent = "PRACTICE AGAIN";
+      $("changeUnit").classList.add("show");
+      cancelSpeech();
+      showView("finish");
+      return;
+    }
+
     if(phase === "main" && lockedSpellingPct === null){
       lockedSpellingPct = Math.round((mainCorrect / ROUND_SIZE) * 100);
     }
     const pct = spellingPercent();
+    let tierKey = "retry";
     let tier = AVATARS.retry;
-    if(pct >= 90) tier = AVATARS.wow;
-    else if(pct >= 75) tier = AVATARS.good;
+    if(pct >= 90){ tierKey = "wow"; tier = AVATARS.wow; }
+    else if(pct >= 75){ tierKey = "good"; tier = AVATARS.good; }
 
+    finish.classList.add("assess", "tier-" + tierKey);
+    $("finishLearn").classList.add("hide");
+    $("finishHeading").classList.remove("hide");
+    $("yazminWrap").classList.remove("hide");
+    $("finishScore").classList.remove("hide");
     $("finishHeading").textContent = tier.heading;
     const img = $("yazminAvatar");
     img.src = tier.src;
@@ -160,9 +185,8 @@
     $("spellingScore").textContent = pct + "%";
     $("finalScore").textContent = "⭐ " + score + " points";
     $("finalStats").textContent = "🔥 Best streak: " + bestStreak;
-    const practiceBtn = $("practiceMistakes");
-    if(gameMode === "choose" && missedWords.length > 0) practiceBtn.classList.add("show");
-    else practiceBtn.classList.remove("show");
+    $("restart").textContent = "PLAY AGAIN";
+    if(missedWords.length > 0) practiceBtn.classList.add("show");
     $("changeUnit").classList.add("show");
     cancelSpeech();
     showView("finish");
