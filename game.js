@@ -351,7 +351,10 @@
         await pause(350);
         continue;
       }
-      await speakText(ch.toUpperCase(), 0.7);
+      // AUDIO ONLY: lowercase so TTS says letter names, never "Capital …"
+      // Visual tiles keep the exact character from words.js.
+      const speechChar = /[A-Za-zÀ-ÿ]/.test(ch) ? ch.toLowerCase() : ch;
+      await speakText(speechChar, 0.7);
       await pause(220);
     }
     renderLetterBoard(word, -1);
