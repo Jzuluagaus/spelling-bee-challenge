@@ -1,4 +1,4 @@
-const CACHE = "spelling-bee-v2";
+const CACHE = "spelling-bee-v3";
 
 self.addEventListener("install", event => {
   self.skipWaiting();

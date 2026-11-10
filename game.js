@@ -112,19 +112,19 @@
   function buildMenu(){
     const grid = $("unitGrid");
     grid.innerHTML = "";
-    for(let n=1;n<=9;n++){
-      const key = "unit" + n;
+    UNIT_ORDER.forEach((key) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "unit-btn";
       btn.dataset.unit = key;
+      const label = getUnitLabel(key);
       const playable = isUnitPlayable(key);
       btn.disabled = !playable;
-      if(playable) btn.textContent = "Unit " + n;
-      else btn.innerHTML = "Unit " + n + '<span class="soon">Coming soon</span>';
+      if(playable) btn.textContent = label;
+      else btn.innerHTML = label + '<span class="soon">Coming soon</span>';
       btn.addEventListener("click", () => selectUnit(key));
       grid.appendChild(btn);
-    }
+    });
     const mixed = $("mixedBtn");
     const mixedOk = isUnitPlayable("mixed");
     mixed.disabled = !mixedOk;
@@ -207,6 +207,8 @@
       return;
     }
     words = getUnitWordList(activeUnit);
+    $("modeSelect").querySelector(".menu-title").textContent =
+      getUnitLabel(activeUnit) + " — How do you want to practice?";
     showView("mode");
   }
 

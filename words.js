@@ -1,1227 +1,723 @@
 /* Spelling Bee Challenge vocabulary bank.
- * Official school list: Units 1–9, 22 words each (198 total).
+ * Units 1.1–4.3 from the school Vocabulary / Spelling lists.
  * Add or edit unit arrays here only — the game engine reads WORD_BANK.
  */
+const UNIT_ORDER = [
+  "unit1_1",
+  "unit1_2",
+  "unit1_3",
+  "unit2_1",
+  "unit2_2",
+  "unit2_3",
+  "unit3_1",
+  "unit3_2",
+  "unit3_3",
+  "unit4_1",
+  "unit4_2",
+  "unit4_3",
+];
+
+const UNIT_LABELS = {
+  "unit1_1": "Unit 1.1",
+  "unit1_2": "Unit 1.2",
+  "unit1_3": "Unit 1.3",
+  "unit2_1": "Unit 2.1",
+  "unit2_2": "Unit 2.2",
+  "unit2_3": "Unit 2.3",
+  "unit3_1": "Unit 3.1",
+  "unit3_2": "Unit 3.2",
+  "unit3_3": "Unit 3.3",
+  "unit4_1": "Unit 4.1",
+  "unit4_2": "Unit 4.2",
+  "unit4_3": "Unit 4.3",
+};
+
 const WORD_BANK = {
-  unit1: [
+  unit1_1: [
     {
-      word: "school",
-      wrong: ["scool", "scholl", "skool"],
-      definition: "A place where students go to learn.",
-      sentence: "We learn reading and math at _____."
+      word: "grandparents",
+      wrong: ["grandparrents", "grandperents", "granparents"],
+      definition: "Your mother's or father's parents.",
+      sentence: "My _____ visit us on Sundays."
     },
     {
-      word: "brother",
-      wrong: ["brothur", "brothr", "bruther"],
-      definition: "A boy who has the same parents as you.",
-      sentence: "My _____ plays soccer with me."
+      word: "grandson",
+      wrong: ["granson", "grandsun", "grandsone"],
+      definition: "A boy who is the child of your son or daughter.",
+      sentence: "Their _____ loves to play soccer."
     },
     {
-      word: "sister",
-      wrong: ["sistar", "sistter", "sistr"],
-      definition: "A girl who has the same parents as you.",
-      sentence: "My _____ helps me with homework."
+      word: "granddaughter",
+      wrong: ["grandauter", "granddaugter", "granddauhter"],
+      definition: "A girl who is the child of your son or daughter.",
+      sentence: "Their _____ drew them a picture."
     },
     {
-      word: "friend",
-      wrong: ["freind", "frend", "friemd"],
-      definition: "A person you like and enjoy being with.",
-      sentence: "Sam is my best _____."
+      word: "cook a meal",
+      wrong: ["cok a meal", "cook a mele", "cook a meel"],
+      definition: "To make food ready to eat.",
+      sentence: "Grandma will _____ for the family."
     },
     {
-      word: "name",
-      wrong: ["naim", "neme", "namme"],
-      definition: "What someone or something is called.",
-      sentence: "Please write your _____ on the paper."
+      word: "tell a story",
+      wrong: ["tel a story", "tell a storey", "tell a storry"],
+      definition: "To say what happened in a book or tale.",
+      sentence: "Please _____ about the dragon."
     },
     {
-      word: "video game",
-      wrong: ["vedio game", "video gaim", "vido game"],
-      definition: "A fun game you play on a screen.",
-      sentence: "I play a _____ after homework."
+      word: "take a walk",
+      wrong: ["tak a walk", "take a wok", "take a walke"],
+      definition: "To go outside and walk for a while.",
+      sentence: "We _____ in the park after lunch."
     },
     {
-      word: "doll",
-      wrong: ["dol", "dole", "dll"],
-      definition: "A toy that looks like a person.",
-      sentence: "She hugged her favorite _____."
+      word: "do chores",
+      wrong: ["do chors", "do choars", "do choores"],
+      definition: "To do jobs that help at home.",
+      sentence: "I _____ before I play."
     },
     {
-      word: "animals",
-      wrong: ["annimals", "animels", "animales"],
-      definition: "Living creatures like dogs, cats, and birds.",
-      sentence: "The zoo has many _____."
+      word: "treats",
+      wrong: ["treets", "treates", "treaats"],
+      definition: "Special snacks or sweets you enjoy.",
+      sentence: "Grandpa brought us candy _____."
     },
     {
-      word: "burger",
-      wrong: ["burgur", "bergar", "burgger"],
-      definition: "A sandwich with meat inside a bun.",
-      sentence: "I ate a cheese _____ for lunch."
+      word: "watering can",
+      wrong: ["waterng can", "watering cann", "waterin can"],
+      definition: "A container used to pour water on plants.",
+      sentence: "Fill the _____ and water the flowers."
     },
     {
-      word: "pizza",
-      wrong: ["piza", "pizaa", "pitza"],
-      definition: "A flat food with cheese and toppings.",
-      sentence: "We shared a pepperoni _____."
+      word: "card",
+      wrong: ["kard", "carrd", "cade"],
+      definition: "A folded paper with a message for someone.",
+      sentence: "I made a birthday _____ for Mom."
     },
-    {
-      word: "blond",
-      wrong: ["blondee", "blonnd", "blondd"],
-      definition: "Hair that is light yellow in color.",
-      sentence: "The boy has _____ hair."
-    },
-    {
-      word: "color",
-      wrong: ["collor", "culor", "coler"],
-      definition: "Red, blue, green, and other shades.",
-      sentence: "What _____ is your backpack?"
-    },
-    {
-      word: "world",
-      wrong: ["worlde", "wirld", "worald"],
-      definition: "The Earth and all the people and places on it.",
-      sentence: "Maps help us learn about the _____."
-    },
-    {
-      word: "same",
-      wrong: ["saime", "samme", "seme"],
-      definition: "Not different; alike.",
-      sentence: "We wear the _____ school shirt."
-    },
-    {
-      word: "different",
-      wrong: ["diferent", "diffrent", "differant"],
-      definition: "Not the same as something else.",
-      sentence: "My lunch is _____ from yours."
-    },
-    {
-      word: "finger print",
-      wrong: ["fingr print", "finger prent", "fingger print"],
-      definition: "The mark made by the tip of a finger.",
-      sentence: "Each person has a unique _____."
-    },
-    {
-      word: "children",
-      wrong: ["childern", "childrin", "chidren"],
-      definition: "Young boys and girls.",
-      sentence: "The _____ played in the park."
-    },
-    {
-      word: "fly",
-      wrong: ["flie", "fley", "flyy"],
-      definition: "To move through the air with wings.",
-      sentence: "Birds can _____ in the sky."
-    },
-    {
-      word: "read",
-      wrong: ["reed", "rad", "readd"],
-      definition: "To look at words and understand them.",
-      sentence: "I _____ a story every night."
-    },
-    {
-      word: "do gymnastics",
-      wrong: ["do gymnasticks", "do gymnastiks", "do jimnastics"],
-      definition: "To do sports with jumps, flips, and balance.",
-      sentence: "We _____ in PE class."
-    },
-    {
-      word: "draw",
-      wrong: ["drawe", "drow", "drav"],
-      definition: "To make a picture with a pencil or crayon.",
-      sentence: "I like to _____ animals."
-    },
-    {
-      word: "love",
-      wrong: ["luv", "loove", "lov"],
-      definition: "A strong feeling of caring for someone.",
-      sentence: "I _____ my family."
-    }
   ],
-  unit2: [
+  unit1_2: [
     {
-      word: "grandpa",
-      wrong: ["granpa", "grandpah", "grandpaa"],
-      definition: "Your mother’s or father’s father.",
-      sentence: "My _____ tells funny stories."
+      word: "bake cookies",
+      wrong: ["bake cookys", "bak cookies", "bake cookeis"],
+      definition: "To cook sweet biscuits in the oven.",
+      sentence: "We _____ together on Saturday."
     },
     {
-      word: "grandma",
-      wrong: ["granma", "grandmah", "grandmaa"],
-      definition: "Your mother’s or father’s mother.",
-      sentence: "My _____ bakes cookies."
+      word: "watch cartoons",
+      wrong: ["wach cartoons", "watch cartunes", "watch cartons"],
+      definition: "To look at funny animated shows.",
+      sentence: "I _____ after breakfast."
     },
     {
-      word: "mom",
-      wrong: ["mum", "momm", "moom"],
-      definition: "Another word for mother.",
-      sentence: "My _____ packed my lunch."
+      word: "do puzzles",
+      wrong: ["do puzles", "do puzzels", "do puzzelz"],
+      definition: "To fit pieces together to make a picture.",
+      sentence: "We _____ on the living room floor."
     },
     {
-      word: "dad",
-      wrong: ["dadd", "dadde", "dahd"],
-      definition: "Another word for father.",
-      sentence: "My _____ reads to me."
+      word: "do karate",
+      wrong: ["do karatee", "do karati", "do carate"],
+      definition: "To practice a sport with kicks and punches.",
+      sentence: "He likes to _____ after school."
     },
     {
-      word: "wife",
-      wrong: ["wive", "wyfe", "wiffe"],
-      definition: "A married woman.",
-      sentence: "Uncle Dan’s _____ is kind."
+      word: "forget",
+      wrong: ["forgat", "forgget", "foget"],
+      definition: "To not remember something.",
+      sentence: "Don't _____ your lunchbox."
     },
     {
-      word: "husband",
-      wrong: ["husbend", "hussband", "husban"],
-      definition: "A married man.",
-      sentence: "Aunt May’s _____ cooks dinner."
+      word: "alone",
+      wrong: ["allone", "alon", "aloan"],
+      definition: "By yourself, with no one else.",
+      sentence: "She sat _____ on the bench."
     },
-    {
-      word: "daughter",
-      wrong: ["daugter", "daughtor", "doughter"],
-      definition: "A person’s female child.",
-      sentence: "Their _____ is in grade two."
-    },
-    {
-      word: "son",
-      wrong: ["sun", "soan", "sinn"],
-      definition: "A person’s male child.",
-      sentence: "Their _____ likes baseball."
-    },
-    {
-      word: "dentist",
-      wrong: ["dentest", "dennist", "dentis"],
-      definition: "A doctor who takes care of teeth.",
-      sentence: "I visit the _____ to clean my teeth."
-    },
-    {
-      word: "pilot",
-      wrong: ["pilat", "pylot", "pillot"],
-      definition: "A person who flies an airplane.",
-      sentence: "The _____ flew the plane safely."
-    },
-    {
-      word: "bedroom",
-      wrong: ["bedrom", "bedroon", "bedrrom"],
-      definition: "A room where you sleep.",
-      sentence: "My toys are in my _____."
-    },
-    {
-      word: "student",
-      wrong: ["studnet", "studant", "stuudent"],
-      definition: "A person who learns at school.",
-      sentence: "Every _____ has a desk."
-    },
-    {
-      word: "t-shirt",
-      wrong: ["tshirt", "t-shurt", "tee-shirt"],
-      definition: "A soft shirt with short sleeves.",
-      sentence: "I wear a blue _____."
-    },
-    {
-      word: "baseball",
-      wrong: ["basebal", "bassball", "baceball"],
-      definition: "A sport with a bat and a ball.",
-      sentence: "We play _____ after school."
-    },
-    {
-      word: "violin",
-      wrong: ["violen", "violinn", "vyolin"],
-      definition: "A musical instrument you play with a bow.",
-      sentence: "She practices the _____."
-    },
-    {
-      word: "bike",
-      wrong: ["byke", "bik", "bicicle"],
-      definition: "A bicycle you ride with two wheels.",
-      sentence: "I ride my _____ to the park."
-    },
-    {
-      word: "funny",
-      wrong: ["funney", "funy", "funnie"],
-      definition: "Something that makes you laugh.",
-      sentence: "The clown was very _____."
-    },
-    {
-      word: "kind",
-      wrong: ["kynd", "kinnd", "kined"],
-      definition: "Nice and caring to others.",
-      sentence: "Please be _____ to your friends."
-    },
-    {
-      word: "calm",
-      wrong: ["caalm", "kalm", "caml"],
-      definition: "Quiet and peaceful; not upset.",
-      sentence: "Take a deep breath and stay _____."
-    },
-    {
-      word: "friendly",
-      wrong: ["frendly", "friendley", "frienly"],
-      definition: "Nice and easy to talk to.",
-      sentence: "Our new neighbor is _____."
-    },
-    {
-      word: "spider",
-      wrong: ["spyder", "spidir", "spidder"],
-      definition: "A small animal with eight legs.",
-      sentence: "A _____ spun a web."
-    },
-    {
-      word: "duck",
-      wrong: ["duk", "ducck", "dukk"],
-      definition: "A bird that swims and says quack.",
-      sentence: "The _____ swam in the pond."
-    }
   ],
-  unit3: [
+  unit1_3: [
     {
-      word: "aunt",
-      wrong: ["ahnt", "ante", "auntt"],
-      definition: "Your parent’s sister.",
-      sentence: "My _____ gave me a gift."
+      word: "lamb",
+      wrong: ["lam", "lamm", "lambb"],
+      definition: "A baby sheep.",
+      sentence: "The soft _____ followed its mother."
     },
     {
-      word: "uncle",
-      wrong: ["unckel", "unkel", "uncel"],
-      definition: "Your parent’s brother.",
-      sentence: "My _____ tells jokes."
+      word: "bark",
+      wrong: ["barck", "berk", "barrk"],
+      definition: "The sound a dog makes.",
+      sentence: "I heard the dog _____ at night."
     },
     {
-      word: "cousin",
-      wrong: ["cusin", "couzin", "cousen"],
-      definition: "The child of your aunt or uncle.",
-      sentence: "I play with my _____ on weekends."
+      word: "chase",
+      wrong: ["chace", "chasse", "chaise"],
+      definition: "To run after someone or something.",
+      sentence: "The puppy likes to _____ the ball."
     },
     {
-      word: "beach",
-      wrong: ["beech", "bech", "beache"],
-      definition: "Sand and water by the ocean or lake.",
-      sentence: "We built a castle at the _____."
+      word: "run away",
+      wrong: ["run awey", "runn away", "run awway"],
+      definition: "To leave quickly because you are scared.",
+      sentence: "The rabbit will _____ from the fox."
     },
     {
-      word: "swim",
-      wrong: ["swimm", "swym", "swem"],
-      definition: "To move through water using your arms and legs.",
-      sentence: "I can _____ in the pool."
+      word: "feed",
+      wrong: ["fede", "fead", "fedd"],
+      definition: "To give food to a person or animal.",
+      sentence: "We _____ the sheep every morning."
     },
     {
-      word: "eat",
-      wrong: ["eet", "ete", "eatt"],
-      definition: "To put food in your mouth and chew it.",
-      sentence: "We _____ lunch at noon."
+      word: "get dark",
+      wrong: ["get darck", "gett dark", "get dirk"],
+      definition: "When the sky turns from light to night.",
+      sentence: "We go home when it starts to _____."
     },
     {
-      word: "holiday",
-      wrong: ["holliday", "holyday", "holaday"],
-      definition: "A special day for rest or celebration.",
-      sentence: "Summer _____ is my favorite."
+      word: "sheepdog",
+      wrong: ["shepdog", "sheep dogg", "sheapdog"],
+      definition: "A dog that helps take care of sheep.",
+      sentence: "The _____ watched the flock."
     },
     {
-      word: "make a sandcastles",
-      wrong: ["make a sandcastlees", "make a sandcastels", "make a sand castles"],
-      definition: "To build castles from sand.",
-      sentence: "Kids _____ at the beach."
-    },
-    {
-      word: "watch tv",
-      wrong: ["wach tv", "watch t.v.", "watch teevee"],
-      definition: "To look at shows on television.",
-      sentence: "We _____ after dinner."
-    },
-    {
-      word: "laugh",
-      wrong: ["laff", "laf", "lagh"],
-      definition: "To make happy sounds when something is funny.",
-      sentence: "The joke made us _____."
-    },
-    {
-      word: "team",
-      wrong: ["teme", "teem", "tem"],
-      definition: "A group that plays or works together.",
-      sentence: "Our soccer _____ won the game."
-    },
-    {
-      word: "soccer",
-      wrong: ["socker", "socer", "sockar"],
-      definition: "A sport where you kick a ball into a goal.",
-      sentence: "We play _____ at recess."
-    },
-    {
-      word: "uniform",
-      wrong: ["unifrom", "uninorm", "uniiform"],
-      definition: "Special clothes worn by a team or school.",
-      sentence: "I wear my school _____."
-    },
-    {
-      word: "coach",
-      wrong: ["coch", "coache", "cooch"],
-      definition: "A person who trains a team.",
-      sentence: "Our _____ taught us a new play."
-    },
-    {
-      word: "cheer",
-      wrong: ["chear", "cher", "cheere"],
-      definition: "To shout happy words to support someone.",
-      sentence: "We _____ for our team."
-    },
-    {
-      word: "group",
-      wrong: ["grupp", "groop", "grop"],
-      definition: "A set of people together.",
-      sentence: "Our class worked in a _____."
-    },
-    {
-      word: "art",
-      wrong: ["ahrt", "arte", "arrt"],
-      definition: "Drawing, painting, and making creative things.",
-      sentence: "I love _____ class."
-    },
-    {
-      word: "ballet",
-      wrong: ["balet", "ballay", "ballett"],
-      definition: "A graceful dance with special steps.",
-      sentence: "She takes _____ lessons."
-    },
-    {
-      word: "chess",
-      wrong: ["ches", "chesss", "chezz"],
-      definition: "A board game with kings and queens.",
-      sentence: "We play _____ at lunch."
-    },
-    {
-      word: "club",
-      wrong: ["cloub", "clubb", "clab"],
-      definition: "A group that meets for a shared hobby.",
-      sentence: "I joined the reading _____."
-    },
-    {
-      word: "make friends",
-      wrong: ["make freinds", "make frends", "mak friends"],
-      definition: "To start new friendships.",
-      sentence: "It is fun to _____ at school."
-    },
-    {
-      word: "learn",
-      wrong: ["lern", "learne", "lurn"],
-      definition: "To find out something new.",
-      sentence: "We _____ new words every day."
-    }
-  ],
-  unit4: [
-    {
-      word: "classmates",
-      wrong: ["classmats", "clasmmates", "classmatess"],
-      definition: "People who are in the same class at school.",
-      sentence: "I work with my _____ during class."
-    },
-    {
-      word: "classroom",
-      wrong: ["clasroom", "classrom", "classrroom"],
-      definition: "A room at school where students learn.",
-      sentence: "Our _____ has desks and a whiteboard."
-    },
-    {
-      word: "country",
-      wrong: ["contry", "countrey", "countri"],
-      definition: "A nation with its own land and government.",
-      sentence: "Mexico is a _____."
-    },
-    {
-      word: "town",
-      wrong: ["toun", "towm", "tawn"],
-      definition: "A place where people live, usually smaller than a city.",
-      sentence: "They live in a small _____."
-    },
-    {
-      word: "recess",
-      wrong: ["reces", "reccess", "resess"],
-      definition: "A break during the school day.",
-      sentence: "We play outside during _____."
-    },
-    {
-      word: "playground",
-      wrong: ["playgrond", "plaiground", "playgroun"],
-      definition: "A place where children can play.",
-      sentence: "The swings are on the _____."
-    },
-    {
-      word: "family",
-      wrong: ["famly", "familey", "familly"],
-      definition: "People who are related to each other.",
-      sentence: "My _____ eats dinner together."
-    },
-    {
-      word: "teacher",
-      wrong: ["techer", "teachar", "teecher"],
-      definition: "A person who helps students learn.",
-      sentence: "Our _____ explained the lesson."
-    },
-    {
-      word: "song",
-      wrong: ["sung", "sogn", "songg"],
-      definition: "A piece of music with words that are sung.",
-      sentence: "We learned a new _____ in music class."
-    },
-    {
-      word: "parade",
-      wrong: ["parad", "paraide", "parrade"],
-      definition: "A public celebration that moves along a route.",
-      sentence: "We watched the _____ downtown."
-    },
-    {
-      word: "forest",
-      wrong: ["forrest", "forst", "foreste"],
-      definition: "A large area covered with trees.",
-      sentence: "Many animals live in the _____."
-    },
-    {
-      word: "plant",
-      wrong: ["plent", "plannt", "plante"],
-      definition: "A living thing that often has roots and leaves.",
-      sentence: "The _____ needs water and sunlight."
-    },
-    {
-      word: "deer",
-      wrong: ["dere", "deeer", "dear"],
-      definition: "A wild animal with long legs; males often have antlers.",
-      sentence: "A _____ walked between the trees."
-    },
-    {
-      word: "squirrel",
-      wrong: ["squirel", "squirrell", "squerrel"],
-      definition: "A small animal with a bushy tail that often climbs trees.",
-      sentence: "The _____ climbed the tree."
-    },
-    {
-      word: "rabbit",
-      wrong: ["rabit", "rabbitt", "rabbet"],
-      definition: "A small animal with long ears and strong back legs.",
-      sentence: "The _____ hopped across the grass."
-    },
-    {
-      word: "bear",
-      wrong: ["bare", "beer", "bair"],
-      definition: "A large strong animal with thick fur.",
-      sentence: "The _____ walked through the forest."
-    },
-    {
-      word: "city",
-      wrong: ["citty", "sity", "citey"],
-      definition: "A large place where many people live and work.",
-      sentence: "The _____ has many tall buildings."
-    },
-    {
-      word: "village",
-      wrong: ["vilage", "villige", "villiage"],
-      definition: "A small community, usually smaller than a town.",
-      sentence: "They visited a quiet _____."
-    },
-    {
-      word: "subway",
-      wrong: ["subwey", "subwai", "subbway"],
-      definition: "A train system that often runs beneath a city.",
-      sentence: "We took the _____ downtown."
-    },
-    {
-      word: "library",
-      wrong: ["libary", "librery", "librray"],
-      definition: "A place with many books to read or borrow.",
-      sentence: "We borrow books from the _____."
-    },
-    {
-      word: "museum",
-      wrong: ["musem", "museam", "muuseum"],
-      definition: "A place that shows art or interesting objects.",
-      sentence: "We saw dinosaur bones at the _____."
-    },
-    {
-      word: "weekend",
-      wrong: ["wekend", "weeknd", "week-end"],
-      definition: "Saturday and Sunday; days off from school for many kids.",
-      sentence: "I visit Grandma on the _____."
-    }
-  ],
-  unit5: [
-    {
-      word: "mother",
-      wrong: ["mothar", "muther", "motherr"],
-      definition: "A female parent.",
-      sentence: "My _____ hugs me in the morning."
-    },
-    {
-      word: "baby",
-      wrong: ["babby", "bayby", "babe"],
-      definition: "A very young child.",
-      sentence: "The _____ is sleeping."
-    },
-    {
-      word: "herd",
-      wrong: ["hurd", "heard", "herdd"],
-      definition: "A group of animals that live or move together.",
-      sentence: "A _____ of elephants walked by."
-    },
-    {
-      word: "leader",
-      wrong: ["leder", "leedear", "leadar"],
-      definition: "A person who guides a group.",
-      sentence: "Our team _____ gave clear instructions."
-    },
-    {
-      word: "lion",
-      wrong: ["lyon", "liun", "lionn"],
-      definition: "A large wild cat known as the king of the jungle.",
-      sentence: "The _____ roared loudly."
-    },
-    {
-      word: "help",
-      wrong: ["halp", "helpp", "hep"],
-      definition: "To do something useful for someone.",
-      sentence: "Please _____ me carry the books."
-    },
-    {
-      word: "drink",
-      wrong: ["drinc", "dreenk", "drinkk"],
-      definition: "To take liquid into your mouth.",
-      sentence: "I _____ water after recess."
-    },
-    {
-      word: "find",
-      wrong: ["fynd", "finde", "finn"],
-      definition: "To discover something you were looking for.",
-      sentence: "Can you _____ your pencil?"
-    },
-    {
-      word: "safe",
-      wrong: ["saif", "saffe", "saf"],
-      definition: "Not in danger; protected.",
-      sentence: "Wear a helmet to stay _____."
-    },
-    {
-      word: "water",
-      wrong: ["watter", "worter", "waterr"],
-      definition: "A clear liquid we drink and need to live.",
-      sentence: "Please drink more _____."
-    },
-    {
-      word: "coral reef",
-      wrong: ["coral reaf", "corral reef", "coral ref"],
-      definition: "An underwater home made by tiny sea animals.",
-      sentence: "Fish live in the _____."
-    },
-    {
-      word: "ocean",
-      wrong: ["ocen", "oshun", "oceann"],
-      definition: "A very large body of salt water.",
-      sentence: "Whales swim in the _____."
-    },
-    {
-      word: "crab",
-      wrong: ["crabb", "krab", "crabe"],
-      definition: "A sea animal with a hard shell and claws.",
-      sentence: "A _____ walked sideways."
-    },
-    {
-      word: "seagrass",
-      wrong: ["sea grass", "seegrass", "seagras"],
-      definition: "Grass-like plants that grow in the sea.",
-      sentence: "Turtles eat _____."
-    },
-    {
-      word: "shark",
-      wrong: ["sharck", "shahrk", "sharkk"],
-      definition: "A large fish with sharp teeth.",
-      sentence: "A _____ swam near the boat."
-    },
-    {
-      word: "turtle",
-      wrong: ["turtel", "turttle", "tertle"],
-      definition: "An animal with a hard shell on its back.",
-      sentence: "The _____ moved slowly."
-    },
-    {
-      word: "hospital",
-      wrong: ["hospitol", "hosptal", "hospitall"],
-      definition: "A place where doctors help sick people.",
-      sentence: "Dad works at the _____."
-    },
-    {
-      word: "supermarket",
-      wrong: ["supermaket", "super market", "supermarcket"],
-      definition: "A big store that sells food and other things.",
-      sentence: "We buy milk at the _____."
-    },
-    {
-      word: "mail carrier",
-      wrong: ["mail carier", "mail carryer", "mael carrier"],
-      definition: "A person who brings letters and packages.",
-      sentence: "The _____ delivered a box."
-    },
-    {
-      word: "doctor",
-      wrong: ["docter", "doktor", "doctar"],
-      definition: "A person who helps sick or hurt people.",
-      sentence: "The _____ checked my ears."
-    },
-    {
-      word: "police officer",
-      wrong: ["police offiser", "police oficer", "poliece officer"],
-      definition: "A person who helps keep people safe.",
-      sentence: "A _____ directed the cars."
-    },
-    {
-      word: "work",
-      wrong: ["wurk", "worck", "werk"],
-      definition: "A job or the things you do to get results.",
-      sentence: "Mom goes to _____ in the morning."
-    }
-  ],
-  unit6: [
-    {
-      word: "weather",
-      wrong: ["wether", "weathar", "wheather"],
-      definition: "How it feels outside, like rain, sun, or wind.",
-      sentence: "The _____ is sunny today."
-    },
-    {
-      word: "gloves",
-      wrong: ["glovs", "glovves", "glouves"],
-      definition: "Coverings you wear on your hands to keep warm.",
-      sentence: "I wear _____ in winter."
-    },
-    {
-      word: "cold",
-      wrong: ["colld", "coald", "cald"],
-      definition: "Having a low temperature; not warm.",
-      sentence: "The wind feels _____."
-    },
-    {
-      word: "make a snowman",
-      wrong: ["make a snoman", "make a snow men", "mak a snowman"],
-      definition: "To build a person shape from snow.",
-      sentence: "We _____ after it snows."
-    },
-    {
-      word: "share",
-      wrong: ["shar", "shair", "sharee"],
-      definition: "To let others use or have some of what you have.",
-      sentence: "Please _____ the crayons."
+      word: "alone",
+      wrong: ["allone", "alon", "aloan"],
+      definition: "By yourself, with no one else.",
+      sentence: "The lamb felt _____ in the field."
     },
     {
       word: "lonely",
-      wrong: ["lonly", "loneley", "lonley"],
-      definition: "Sad because you are alone.",
-      sentence: "The puppy looked _____."
+      wrong: ["lonley", "lonly", "loneley"],
+      definition: "Sad because you are by yourself.",
+      sentence: "He felt _____ without his friends."
     },
     {
-      word: "online",
-      wrong: ["onlne", "on-line", "onlien"],
-      definition: "Connected to the internet.",
-      sentence: "We talked to Grandma _____."
+      word: "brave",
+      wrong: ["brav", "braive", "brabe"],
+      definition: "Not afraid when something is hard or scary.",
+      sentence: "The _____ dog protected the sheep."
     },
     {
-      word: "outside",
-      wrong: ["outsid", "out side", "outeside"],
-      definition: "Not indoors; in the open air.",
-      sentence: "Let’s play _____."
+      word: "danger",
+      wrong: ["daynger", "dangr", "dangger"],
+      definition: "Something that can hurt you.",
+      sentence: "Stay away from _____ near the road."
     },
     {
-      word: "neighborhood",
-      wrong: ["neighbourhoodd", "nieghborhood", "neigborhood"],
-      definition: "The area around where you live.",
-      sentence: "Our _____ has a park."
+      word: "protect",
+      wrong: ["protekt", "protact", "prottect"],
+      definition: "To keep someone or something safe.",
+      sentence: "Dogs _____ the farm at night."
     },
-    {
-      word: "nervous",
-      wrong: ["nervus", "nervious", "nerous"],
-      definition: "Feeling worried or a little scared.",
-      sentence: "I felt _____ before the test."
-    },
-    {
-      word: "comic book",
-      wrong: ["comic bok", "commic book", "comic buk"],
-      definition: "A book with stories told in pictures and words.",
-      sentence: "I read a superhero _____."
-    },
-    {
-      word: "take photos",
-      wrong: ["take foto", "take photoes", "tak photos"],
-      definition: "To use a camera to make pictures.",
-      sentence: "We _____ on our trip."
-    },
-    {
-      word: "upload",
-      wrong: ["uplod", "uppload", "uplaod"],
-      definition: "To send a file from your device to the internet.",
-      sentence: "Please _____ your drawing."
-    },
-    {
-      word: "website",
-      wrong: ["websight", "webiste", "web site"],
-      definition: "A place on the internet with pages of information.",
-      sentence: "Our school has a _____."
-    },
-    {
-      word: "story",
-      wrong: ["storey", "storry", "stori"],
-      definition: "A tale about people or events.",
-      sentence: "Teacher read a funny _____."
-    },
-    {
-      word: "fun",
-      wrong: ["funn", "phun", "fune"],
-      definition: "Enjoyable and happy.",
-      sentence: "The party was _____."
-    },
-    {
-      word: "neighbor",
-      wrong: ["nieghbor", "neighber", "neigbor"],
-      definition: "A person who lives near you.",
-      sentence: "Our _____ waved hello."
-    },
-    {
-      word: "greet",
-      wrong: ["great", "grete", "gret"],
-      definition: "To say hello to someone.",
-      sentence: "We _____ our teacher each morning."
-    },
-    {
-      word: "wash the car",
-      wrong: ["wash the carr", "wasch the car", "wash da car"],
-      definition: "To clean a car with water and soap.",
-      sentence: "Dad and I _____ on Saturday."
-    },
-    {
-      word: "carry",
-      wrong: ["cary", "carrie", "carrey"],
-      definition: "To hold something and take it somewhere.",
-      sentence: "Please _____ this bag."
-    },
-    {
-      word: "snacks",
-      wrong: ["snaks", "snackes", "snaacks"],
-      definition: "Small amounts of food between meals.",
-      sentence: "Apples make healthy _____."
-    },
-    {
-      word: "cookies",
-      wrong: ["cookys", "cookeis", "cokies"],
-      definition: "Sweet baked treats.",
-      sentence: "We baked chocolate chip _____."
-    }
   ],
-  unit7: [
+  unit2_1: [
     {
-      word: "clothes",
-      wrong: ["cloths", "clothese", "cloaths"],
-      definition: "Things you wear, like shirts and pants.",
-      sentence: "Pack warm _____ for the trip."
+      word: "first",
+      wrong: ["ferst", "frist", "furst"],
+      definition: "Before everything else; number one.",
+      sentence: "She finished _____ in the race."
     },
     {
-      word: "belt",
-      wrong: ["blt", "bealt", "bellt"],
-      definition: "A strap you wear around your waist.",
-      sentence: "He tightened his _____."
+      word: "second",
+      wrong: ["seccond", "secend", "seckond"],
+      definition: "The one after first; number two.",
+      sentence: "I came in _____ place."
     },
     {
-      word: "boots",
-      wrong: ["butes", "bootz", "botts"],
-      definition: "Shoes that cover your ankles or more.",
-      sentence: "I wear rain _____ when it rains."
+      word: "spelling bee",
+      wrong: ["speling bee", "spelling be", "spellin bee"],
+      definition: "A contest where you spell words out loud.",
+      sentence: "Our class won the _____."
     },
     {
-      word: "jeans",
-      wrong: ["jeens", "geans", "jeanz"],
-      definition: "Pants made from denim cloth.",
-      sentence: "My favorite _____ are blue."
+      word: "project",
+      wrong: ["projekt", "proect", "projecct"],
+      definition: "A special piece of school work.",
+      sentence: "We made a science _____ about frogs."
     },
     {
-      word: "shirt",
-      wrong: ["shrit", "shurt", "shirtt"],
-      definition: "Clothing you wear on the upper body.",
-      sentence: "I buttoned my _____."
+      word: "contest",
+      wrong: ["contast", "conntest", "contesst"],
+      definition: "A game or race to find a winner.",
+      sentence: "There is an art _____ at school."
     },
     {
-      word: "hat",
-      wrong: ["hatt", "haat", "het"],
-      definition: "Something you wear on your head.",
-      sentence: "Wear a _____ in the sun."
+      word: "habitat",
+      wrong: ["habbitat", "habitatt", "habutat"],
+      definition: "The place where an animal lives in nature.",
+      sentence: "A pond is a frog's _____."
     },
     {
-      word: "beautiful",
-      wrong: ["beatiful", "beautifull", "beutiful"],
-      definition: "Very pretty or lovely to look at.",
-      sentence: "The sunset was _____."
+      word: "pair",
+      wrong: ["pare", "peir", "paire"],
+      definition: "Two things that go together.",
+      sentence: "I need a _____ of socks."
     },
     {
-      word: "colorful",
-      wrong: ["colourfull", "colorfull", "collorful"],
-      definition: "Having many bright colors.",
-      sentence: "The birds were _____."
+      word: "unhappy",
+      wrong: ["unhapy", "unhappey", "unhapyp"],
+      definition: "Sad or not feeling good.",
+      sentence: "She was _____ when she lost her toy."
     },
     {
-      word: "long",
-      wrong: ["lonng", "lung", "loong"],
-      definition: "Measuring a great length; not short.",
-      sentence: "She has _____ hair."
+      word: "jellyfish",
+      wrong: ["jellyfih", "jelisfish", "jelly fishh"],
+      definition: "A soft sea animal that can sting.",
+      sentence: "We saw a _____ at the beach."
     },
     {
-      word: "wear",
-      wrong: ["ware", "weer", "wair"],
-      definition: "To have clothes on your body.",
-      sentence: "We _____ jackets when it is cold."
+      word: "glue",
+      wrong: ["glu", "gluee", "gluw"],
+      definition: "A sticky liquid used to stick things together.",
+      sentence: "Use _____ to fix the paper."
     },
-    {
-      word: "envelope",
-      wrong: ["envolope", "envelop", "envalope"],
-      definition: "A paper cover for a letter.",
-      sentence: "Put the card in an _____."
-    },
-    {
-      word: "New year",
-      wrong: ["newyear", "New yeer", "Newy ear"],
-      definition: "The celebration when a year begins.",
-      sentence: "We watch fireworks on _____."
-    },
-    {
-      word: "fireworks",
-      wrong: ["firewerks", "fire works", "firworks"],
-      definition: "Bright colorful lights that explode in the sky.",
-      sentence: "The _____ lit up the night."
-    },
-    {
-      word: "give",
-      wrong: ["giv", "geve", "givve"],
-      definition: "To hand something to someone.",
-      sentence: "Please _____ me the pencil."
-    },
-    {
-      word: "grapes",
-      wrong: ["graps", "grapez", "graipes"],
-      definition: "Small round fruits that grow in bunches.",
-      sentence: "I packed _____ for snack."
-    },
-    {
-      word: "throw",
-      wrong: ["thro", "throe", "throwe"],
-      definition: "To send something through the air with your hand.",
-      sentence: "_____ the ball to me!"
-    },
-    {
-      word: "loud",
-      wrong: ["laud", "loude", "lud"],
-      definition: "Making a lot of sound; not quiet.",
-      sentence: "The music was too _____."
-    },
-    {
-      word: "soft",
-      wrong: ["soff", "soaft", "sof"],
-      definition: "Easy to press; not hard.",
-      sentence: "The pillow feels _____."
-    },
-    {
-      word: "music",
-      wrong: ["musik", "mussic", "muisc"],
-      definition: "Sounds arranged to be nice to hear.",
-      sentence: "We dance to happy _____."
-    },
-    {
-      word: "history",
-      wrong: ["histry", "histroy", "hisstory"],
-      definition: "True stories about the past.",
-      sentence: "We study _____ in class."
-    },
-    {
-      word: "musician",
-      wrong: ["musican", "musicain", "musitian"],
-      definition: "A person who plays or makes music.",
-      sentence: "The _____ played the piano."
-    },
-    {
-      word: "instruments",
-      wrong: ["instraments", "instrumentes", "instrumants"],
-      definition: "Objects used to make music, like drums or flutes.",
-      sentence: "The band packed their _____."
-    }
   ],
-  unit8: [
+  unit2_2: [
     {
-      word: "vegetables",
-      wrong: ["vegtables", "vegatables", "vegetabls"],
-      definition: "Healthy plant foods like carrots and broccoli.",
-      sentence: "Eat more _____ with dinner."
+      word: "afraid",
+      wrong: ["afriad", "affraid", "afraide"],
+      definition: "Feeling scared of something.",
+      sentence: "I am _____ of the dark."
     },
     {
-      word: "chicken",
-      wrong: ["chiken", "chickin", "chiccken"],
-      definition: "A bird raised for eggs or meat; also the meat.",
-      sentence: "We had _____ and rice."
+      word: "hole",
+      wrong: ["holl", "hoal", "holee"],
+      definition: "An empty space in the ground or in something.",
+      sentence: "The rabbit dug a _____."
     },
     {
-      word: "yogurt",
-      wrong: ["yoghurt", "yogart", "yogourt"],
-      definition: "A creamy food made from milk.",
-      sentence: "I eat strawberry _____."
+      word: "dig",
+      wrong: ["digg", "dic", "diig"],
+      definition: "To make a hole in the ground.",
+      sentence: "Dogs like to _____ in the sand."
     },
     {
-      word: "chilli pepper",
-      wrong: ["chili pepper", "chilli peper", "chilly pepper"],
-      definition: "A spicy vegetable used in cooking.",
-      sentence: "This salsa has _____."
+      word: "take care of",
+      wrong: ["take car of", "tak care of", "take care off"],
+      definition: "To look after someone or something.",
+      sentence: "We _____ our class pet."
     },
     {
-      word: "salad",
-      wrong: ["sallad", "saled", "saladd"],
-      definition: "A dish of mixed vegetables, often with lettuce.",
-      sentence: "I made a green _____."
+      word: "store",
+      wrong: ["stoar", "stor", "storr"],
+      definition: "A place where you buy things.",
+      sentence: "We went to the _____ for milk."
     },
     {
-      word: "sandwich",
-      wrong: ["sandwhich", "sandwitch", "sandwiche"],
-      definition: "Food between two pieces of bread.",
-      sentence: "I packed a cheese _____."
+      word: "buy",
+      wrong: ["byuy", "buye", "bui"],
+      definition: "To give money to get something.",
+      sentence: "I want to _____ a new book."
     },
-    {
-      word: "delicious",
-      wrong: ["delicios", "delicous", "delishous"],
-      definition: "Tasting very good.",
-      sentence: "The cake was _____."
-    },
-    {
-      word: "vegetarian",
-      wrong: ["vegaterian", "vegeterian", "vegetariam"],
-      definition: "A person who does not eat meat.",
-      sentence: "My aunt is a _____."
-    },
-    {
-      word: "exciting",
-      wrong: ["exiting", "excitting", "exciteing"],
-      definition: "Full of energy and fun; thrilling.",
-      sentence: "The roller coaster was _____."
-    },
-    {
-      word: "bottle",
-      wrong: ["bottel", "botle", "bottlle"],
-      definition: "A container for holding drinks.",
-      sentence: "Fill your water _____."
-    },
-    {
-      word: "art museum",
-      wrong: ["art museam", "art musem", "arts museum"],
-      definition: "A place that shows paintings and sculptures.",
-      sentence: "We visited an _____."
-    },
-    {
-      word: "building",
-      wrong: ["bilding", "buildng", "buidling"],
-      definition: "A structure with walls and a roof, like a house or school.",
-      sentence: "Our school is a tall _____."
-    },
-    {
-      word: "sidewalk",
-      wrong: ["side walk", "sidewak", "sidwalk"],
-      definition: "A path beside the road for walking.",
-      sentence: "Stay on the _____."
-    },
-    {
-      word: "interesting",
-      wrong: ["intresting", "interesing", "interestng"],
-      definition: "Holding your attention; not boring.",
-      sentence: "That book is _____."
-    },
-    {
-      word: "café",
-      wrong: ["cafe", "caffé", "caffee"],
-      definition: "A small place to buy drinks and snacks.",
-      sentence: "We met at a _____."
-    },
-    {
-      word: "plate",
-      wrong: ["platt", "plait", "plaate"],
-      definition: "A flat dish you eat food from.",
-      sentence: "Put the cookies on a _____."
-    },
-    {
-      word: "words",
-      wrong: ["werd", "wordes", "wrods"],
-      definition: "Units of language made of letters.",
-      sentence: "New _____ help us talk better."
-    },
-    {
-      word: "alphabet",
-      wrong: ["alfabet", "alphabeth", "alphbet"],
-      definition: "The letters from A to Z.",
-      sentence: "We sang the _____ song."
-    },
-    {
-      word: "letter",
-      wrong: ["letr", "lettar", "lettter"],
-      definition: "A written message; also a character like A or B.",
-      sentence: "I wrote a _____ to Grandma."
-    },
-    {
-      word: "thousand",
-      wrong: ["thousend", "thousant", "thousnd"],
-      definition: "The number 1,000.",
-      sentence: "A _____ is ten hundreds."
-    },
-    {
-      word: "right",
-      wrong: ["rite", "rihgt", "righte"],
-      definition: "The opposite of left; also correct.",
-      sentence: "Raise your _____ hand."
-    },
-    {
-      word: "left",
-      wrong: ["lefft", "luft", "lef"],
-      definition: "The opposite of right.",
-      sentence: "Turn _____ at the corner."
-    }
   ],
-  unit9: [
+  unit2_3: [
     {
-      word: "mountain",
-      wrong: ["mountan", "mountian", "mounatin"],
-      definition: "A very high hill of land.",
-      sentence: "We hiked up the _____."
+      word: "cherry",
+      wrong: ["chery", "cherri", "cheery"],
+      definition: "A small red fruit with a pit.",
+      sentence: "I ate a sweet _____."
     },
     {
-      word: "horse",
-      wrong: ["hors", "hoarse", "horce"],
-      definition: "A large animal people can ride.",
-      sentence: "The _____ ran in the field."
+      word: "chopsticks",
+      wrong: ["chopstiks", "chop sticks", "chopstickes"],
+      definition: "Two thin sticks used to eat food.",
+      sentence: "She learned to eat with _____."
     },
     {
-      word: "climb",
-      wrong: ["clime", "climbe", "climm"],
-      definition: "To go up something using hands and feet.",
-      sentence: "We _____ the rock wall."
+      word: "excited",
+      wrong: ["exited", "excitted", "exsitied"],
+      definition: "Very happy and full of energy.",
+      sentence: "We felt _____ about the party."
     },
     {
-      word: "cool",
-      wrong: ["coul", "coole", "coo"],
-      definition: "A little cold; also stylish.",
-      sentence: "The breeze feels _____."
+      word: "invite",
+      wrong: ["invight", "invitte", "envite"],
+      definition: "To ask someone to come to an event.",
+      sentence: "Please _____ your friends to lunch."
     },
     {
-      word: "warm",
-      wrong: ["wurm", "warme", "wram"],
-      definition: "A little hot; comfortably heated.",
-      sentence: "The soup is _____."
+      word: "ask",
+      wrong: ["aski", "assk", "asc"],
+      definition: "To say a question to someone.",
+      sentence: "You can _____ the teacher for help."
     },
     {
-      word: "boat",
-      wrong: ["bote", "bott", "boate"],
-      definition: "A vehicle that travels on water.",
-      sentence: "We rode a _____ on the lake."
+      word: "celebration",
+      wrong: ["celeberation", "celebrasion", "celibration"],
+      definition: "A happy party for a special day.",
+      sentence: "The birthday _____ was loud and fun."
+    },
+  ],
+  unit3_1: [
+    {
+      word: "tracks",
+      wrong: ["traks", "trackes", "traccks"],
+      definition: "Marks left by feet or wheels.",
+      sentence: "We followed the animal _____ in the mud."
     },
     {
-      word: "meat",
-      wrong: ["mete", "meate", "meatt"],
-      definition: "Food that comes from animals.",
-      sentence: "Some people do not eat _____."
+      word: "cub",
+      wrong: ["cubb", "kub", "cubbe"],
+      definition: "A baby bear, lion, or similar animal.",
+      sentence: "The bear _____ stayed close to its mom."
     },
     {
-      word: "seafood",
-      wrong: ["sea food", "seefood", "seafoood"],
-      definition: "Food from the sea, like fish and shrimp.",
-      sentence: "We ordered _____ for dinner."
+      word: "dangerous",
+      wrong: ["dangerus", "dangrous", "dangerouse"],
+      definition: "Able to hurt you; not safe.",
+      sentence: "Crossing the road alone can be _____."
     },
     {
-      word: "visit",
-      wrong: ["visitt", "vizit", "viset"],
-      definition: "To go see a person or place.",
-      sentence: "We will _____ the zoo."
+      word: "cattle",
+      wrong: ["catel", "cattel", "catle"],
+      definition: "Cows and bulls raised on a farm.",
+      sentence: "The _____ ate grass in the field."
     },
     {
-      word: "thirsty",
-      wrong: ["thirstey", "thirstee", "thirsti"],
-      definition: "Needing a drink of water.",
-      sentence: "After running I felt _____."
+      word: "helpful",
+      wrong: ["helpfull", "helpfuli", "halpful"],
+      definition: "Ready to help other people.",
+      sentence: "The _____ guide showed us the path."
     },
     {
-      word: "exhibit",
-      wrong: ["exibit", "exhibitt", "exhbit"],
-      definition: "A display of interesting things to look at.",
-      sentence: "The science _____ had robots."
+      word: "cross",
+      wrong: ["cros", "crosse", "kross"],
+      definition: "To go from one side to the other.",
+      sentence: "We _____ the bridge carefully."
     },
     {
-      word: "movie",
-      wrong: ["moovie", "movey", "movvie"],
-      definition: "A story shown with moving pictures.",
-      sentence: "We watched a funny _____."
+      word: "fence",
+      wrong: ["fense", "fance", "fenc"],
+      definition: "A wall of wood or wire around a place.",
+      sentence: "The horses stay behind the _____."
     },
     {
-      word: "model",
-      wrong: ["modell", "modle", "moddel"],
-      definition: "A small copy of something; also a person who shows clothes.",
-      sentence: "He built a _____ airplane."
+      word: "tourist",
+      wrong: ["tourst", "tourrist", "tourriste"],
+      definition: "A person who visits a place for fun.",
+      sentence: "The _____ took photos of the mountain."
     },
     {
-      word: "free time",
-      wrong: ["freetime", "free tym", "fre time"],
-      definition: "Time when you can choose what to do.",
-      sentence: "I read books in my _____."
+      word: "hundred thousand",
+      wrong: ["hundrid thousand", "hundred thosand", "hundred thousend"],
+      definition: "The number 100,000.",
+      sentence: "About a _____ birds fly south."
     },
     {
-      word: "board game",
-      wrong: ["bord game", "boardgame", "board gaim"],
-      definition: "A game played on a board with pieces.",
-      sentence: "We played a _____ together."
+      word: "surprise",
+      wrong: ["suprise", "surprize", "surprisse"],
+      definition: "Something you did not expect.",
+      sentence: "The party was a big _____."
+    },
+  ],
+  unit3_2: [
+    {
+      word: "teeth",
+      wrong: ["teath", "teth", "teeths"],
+      definition: "The hard white parts in your mouth used to chew.",
+      sentence: "Brush your _____ every day."
     },
     {
-      word: "look after",
-      wrong: ["look afer", "lok after", "look aftter"],
-      definition: "To take care of someone or something.",
-      sentence: "Please _____ your little brother."
+      word: "ostrich",
+      wrong: ["ostrichh", "ostritch", "ostriche"],
+      definition: "A very large bird that cannot fly.",
+      sentence: "An _____ runs very fast."
     },
     {
-      word: "video chat",
-      wrong: ["vedio chat", "video chatt", "vido chat"],
-      definition: "Talking face-to-face using a screen.",
-      sentence: "We had a _____ with cousins."
+      word: "pollen",
+      wrong: ["polen", "pollin", "pollan"],
+      definition: "Yellow powder from flowers that bees carry.",
+      sentence: "Bees collect _____ from flowers."
     },
     {
-      word: "talk",
-      wrong: ["tok", "talck", "taulk"],
-      definition: "To speak words to someone.",
-      sentence: "Let’s _____ about the story."
+      word: "skin",
+      wrong: ["skinn", "scin", "skine"],
+      definition: "The outer covering of your body.",
+      sentence: "Wash the _____ on your hands."
     },
     {
-      word: "homework",
-      wrong: ["home work", "homwork", "homewerk"],
-      definition: "School work you do at home.",
-      sentence: "I finished my _____ early."
+      word: "sloth",
+      wrong: ["slothe", "slothh", "sloath"],
+      definition: "A slow animal that lives in trees.",
+      sentence: "The _____ hangs upside down."
     },
     {
-      word: "math",
-      wrong: ["maths", "mathe", "mathh"],
-      definition: "The study of numbers and shapes.",
-      sentence: "We have _____ after recess."
+      word: "algae",
+      wrong: ["alga", "algee", "algea"],
+      definition: "Tiny green plants that live in water.",
+      sentence: "Green _____ grew on the pond."
     },
     {
-      word: "science",
-      wrong: ["sience", "scieince", "sciense"],
-      definition: "The study of how the world works.",
-      sentence: "In _____ we grew plants."
+      word: "nectar",
+      wrong: ["necter", "nektar", "nectarr"],
+      definition: "Sweet liquid inside flowers.",
+      sentence: "Butterflies drink _____ from blooms."
     },
     {
-      word: "English",
-      wrong: ["Englesh", "Englsh", "Engilsh"],
-      definition: "The language used in this class and many countries.",
-      sentence: "We write stories in _____."
-    }
-  ]
+      word: "provide",
+      wrong: ["provied", "provvide", "pruvide"],
+      definition: "To give something that is needed.",
+      sentence: "Trees _____ shade on hot days."
+    },
+    {
+      word: "follow",
+      wrong: ["folow", "fallow", "follw"],
+      definition: "To go after someone or something.",
+      sentence: "Please _____ the trail markers."
+    },
+    {
+      word: "healthy",
+      wrong: ["helthy", "healthty", "healhty"],
+      definition: "Feeling well and strong.",
+      sentence: "Eating fruit keeps you _____."
+    },
+  ],
+  unit3_3: [
+    {
+      word: "smoke",
+      wrong: ["smok", "smoak", "smocke"],
+      definition: "Gray gas that rises from a fire.",
+      sentence: "_____ came out of the chimney."
+    },
+    {
+      word: "air",
+      wrong: ["aire", "aer", "airr"],
+      definition: "What we breathe all around us.",
+      sentence: "Fresh _____ feels good outside."
+    },
+    {
+      word: "breathe",
+      wrong: ["breath", "brethe", "breethe"],
+      definition: "To take air in and out of your lungs.",
+      sentence: "Swim up so you can _____."
+    },
+    {
+      word: "sunlight",
+      wrong: ["sunlite", "sunligt", "sunllight"],
+      definition: "Light that comes from the sun.",
+      sentence: "Plants need _____ to grow."
+    },
+    {
+      word: "pollution",
+      wrong: ["polution", "pollushion", "pollutin"],
+      definition: "Dirty things that harm air, water, or land.",
+      sentence: "Cars can cause air _____."
+    },
+    {
+      word: "factory",
+      wrong: ["factery", "faktory", "factroy"],
+      definition: "A building where people make things.",
+      sentence: "The toy _____ is near the river."
+    },
+    {
+      word: "take care of",
+      wrong: ["take car of", "tak care of", "take care off"],
+      definition: "To look after someone or something.",
+      sentence: "We must _____ our planet."
+    },
+    {
+      word: "cut down",
+      wrong: ["cutt down", "cut donw", "cut downn"],
+      definition: "To make a tree fall by cutting it.",
+      sentence: "People should not _____ too many trees."
+    },
+    {
+      word: "dirty",
+      wrong: ["dirtty", "dirtey", "derty"],
+      definition: "Not clean.",
+      sentence: "My shoes got _____ in the mud."
+    },
+  ],
+  unit4_1: [
+    {
+      word: "guess",
+      wrong: ["gues", "ges", "guress"],
+      definition: "To try to give an answer without being sure.",
+      sentence: "Can you _____ what is in the box?"
+    },
+    {
+      word: "round",
+      wrong: ["rownd", "raund", "rond"],
+      definition: "Shaped like a circle or ball.",
+      sentence: "A ball is _____."
+    },
+    {
+      word: "hard",
+      wrong: ["harde", "harrd", "hord"],
+      definition: "Not soft; firm to the touch.",
+      sentence: "The desk feels _____."
+    },
+    {
+      word: "magazine",
+      wrong: ["magasine", "magazin", "magizine"],
+      definition: "A thin book with pictures and stories.",
+      sentence: "I read a sports _____."
+    },
+    {
+      word: "flat",
+      wrong: ["flatt", "flate", "flot"],
+      definition: "Smooth and even, not bumpy.",
+      sentence: "The table top is _____."
+    },
+    {
+      word: "drawers",
+      wrong: ["drawerss", "dravers", "droers"],
+      definition: "Boxes that slide in and out of furniture.",
+      sentence: "Socks are in the top _____."
+    },
+    {
+      word: "cake",
+      wrong: ["cak", "caik", "cakke"],
+      definition: "A sweet baked dessert for parties.",
+      sentence: "We ate chocolate _____."
+    },
+    {
+      word: "sweet",
+      wrong: ["sweat", "swet", "sweete"],
+      definition: "Tasting like sugar; not sour.",
+      sentence: "The candy is very _____."
+    },
+    {
+      word: "bounce",
+      wrong: ["bouns", "bounse", "bouce"],
+      definition: "To spring back up after hitting something.",
+      sentence: "Watch the ball _____."
+    },
+    {
+      word: "sour",
+      wrong: ["soure", "sowr", "sorr"],
+      definition: "A sharp taste like a lemon.",
+      sentence: "Lemons taste _____."
+    },
+  ],
+  unit4_2: [
+    {
+      word: "mammals",
+      wrong: ["mamals", "mammels", "mammmals"],
+      definition: "Animals that have hair or fur and drink milk.",
+      sentence: "Dogs and cats are _____."
+    },
+    {
+      word: "birds",
+      wrong: ["birdds", "berds", "brids"],
+      definition: "Animals with feathers and wings.",
+      sentence: "_____ build nests in trees."
+    },
+    {
+      word: "scales",
+      wrong: ["scals", "skales", "scalees"],
+      definition: "Thin hard plates on fish or snakes.",
+      sentence: "Fish have shiny _____."
+    },
+    {
+      word: "gills",
+      wrong: ["gils", "gillls", "ghills"],
+      definition: "Body parts fish use to breathe in water.",
+      sentence: "Fish take in water through their _____."
+    },
+    {
+      word: "fins",
+      wrong: ["finn", "finns", "phins"],
+      definition: "Flat body parts that help fish swim.",
+      sentence: "The fish waved its _____."
+    },
+    {
+      word: "beak",
+      wrong: ["beek", "beack", "beakk"],
+      definition: "The hard mouth of a bird.",
+      sentence: "The parrot has a curved _____."
+    },
+    {
+      word: "divided",
+      wrong: ["dividded", "divied", "devided"],
+      definition: "Split into parts.",
+      sentence: "The class was _____ into two teams."
+    },
+    {
+      word: "wings",
+      wrong: ["winggs", "whings", "wengs"],
+      definition: "Body parts birds use to fly.",
+      sentence: "Butterflies have colorful _____."
+    },
+    {
+      word: "feathers",
+      wrong: ["fethers", "feathrs", "feathres"],
+      definition: "Soft coverings on a bird's body.",
+      sentence: "The pillow is filled with _____."
+    },
+    {
+      word: "breathe",
+      wrong: ["breath", "brethe", "breethe"],
+      definition: "To take air in and out of your lungs.",
+      sentence: "Whales come up to _____."
+    },
+    {
+      word: "fur",
+      wrong: ["furr", "fer", "fuhr"],
+      definition: "Soft hair that covers some animals.",
+      sentence: "The kitten has soft _____."
+    },
+  ],
+  unit4_3: [
+    {
+      word: "hill",
+      wrong: ["hil", "hilll", "hile"],
+      definition: "A small high place of land.",
+      sentence: "We climbed the _____."
+    },
+    {
+      word: "river",
+      wrong: ["rivver", "rivar", "rivre"],
+      definition: "A large stream of water that flows to the sea.",
+      sentence: "Fish swim in the _____."
+    },
+    {
+      word: "land",
+      wrong: ["lande", "lannd", "lund"],
+      definition: "The dry part of the earth, not the sea.",
+      sentence: "Animals live on _____ and in water."
+    },
+    {
+      word: "gray",
+      wrong: ["grey", "grayy", "grai"],
+      definition: "A color between black and white.",
+      sentence: "The sky looks _____ today."
+    },
+    {
+      word: "trip",
+      wrong: ["tripp", "trep", "trippe"],
+      definition: "A journey to another place.",
+      sentence: "Our class went on a field _____."
+    },
+    {
+      word: "smart",
+      wrong: ["smarrt", "smartt", "smert"],
+      definition: "Able to think and learn well.",
+      sentence: "That dog is very _____."
+    },
+  ],
 };
+
+function getUnitLabel(unitKey) {
+  if (unitKey === "mixed") return "Mixed Challenge";
+  return UNIT_LABELS[unitKey] || unitKey;
+}
 
 function getUnitWordList(unitKey) {
   if (unitKey === "mixed") {
-    return Object.keys(WORD_BANK)
-      .filter((k) => k.startsWith("unit"))
-      .flatMap((k) => WORD_BANK[k] || []);
+    const seen = new Set();
+    const outList = [];
+    for (const k of UNIT_ORDER) {
+      for (const entry of WORD_BANK[k] || []) {
+        if (seen.has(entry.word)) continue;
+        seen.add(entry.word);
+        outList.push(entry);
+      }
+    }
+    return outList;
   }
   return (WORD_BANK[unitKey] || []).slice();
 }
 
 function getPlayableUnits() {
-  return Object.keys(WORD_BANK).filter((k) => (WORD_BANK[k] || []).length > 0);
+  return UNIT_ORDER.filter((k) => (WORD_BANK[k] || []).length > 0);
 }
 
 function isUnitPlayable(unitKey) {
